@@ -1,0 +1,1 @@
+# ShopSphere modular apps package

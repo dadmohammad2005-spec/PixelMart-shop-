@@ -1,0 +1,1 @@
+# ShopSphere Automated Test Suite

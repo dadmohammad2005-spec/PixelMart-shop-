@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hardware Catalog &mdash; PixelMart | Laptops & Mobiles in PKR</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../assets/css/style.css" rel="stylesheet">
+    <script>
+        (function(){
+            const saved = localStorage.getItem('pixelmart_theme') || localStorage.getItem('shall_shop_theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', saved);
+            document.documentElement.setAttribute('data-bs-theme', saved);
+        })();
+    </script>
+</head>
+<body>
+
+    <!-- Announcement Bar -->
+    <div class="announcement-bar text-center">
+        <div class="container d-flex align-items-center justify-content-between flex-wrap gap-2" id="announcementBarContent">
+            <span>⚡ <strong>PixelMart Quetta Showroom</strong> &bull; Laptops & Mobile Phones with 1-Year Local Warranty &bull; Doorstep Delivery</span>
+            <span><i class="bi bi-telephone-fill me-1 text-warning"></i> Call: 00816-23-736822</span>
+        </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="navbar navbar-expand-lg navbar-shall">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="../index.html">
+                <img src="../assets/images/pixelmart-logo.png" alt="PixelMart Logo" class="pixel-logo-img">
+                <div class="d-flex flex-column">
+                    <span class="pixel-logo-text">Pixel<span class="mart-part">Mart</span></span>
+                    <span class="pixel-tagline">MOBILE &bull; LAPTOP &bull; GADGETS</span>
+                </div>
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <i class="bi bi-list fs-2 text-dark"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-3">
+                    <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="shop.html">Shop All</a></li>
+                    <li class="nav-item"><a class="nav-link" href="shop.html?category=laptops">Laptops</a></li>
+                    <li class="nav-item"><a class="nav-link" href="shop.html?category=mobile-phones">Mobiles</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../index.html#newArrivalsSection">New Arrivals</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                </ul>
+
+                <form class="header-search-form me-lg-3 my-2 my-lg-0" role="search" id="topSearchForm" onsubmit="event.preventDefault(); applyFilters();">
+                    <i class="bi bi-search header-search-icon"></i>
+                    <input class="form-control header-search-input" type="search" id="topSearchInput" placeholder="Instant model search (HP, ThinkPad, S24...)" aria-label="Search" oninput="debounceApplyFilters()">
+                </form>
+
+                <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0">
+                    <button type="button" class="header-action-btn theme-toggle-btn" title="Toggle Dark/Light Mode" aria-label="Toggle Theme">
+                        <i class="bi bi-moon-stars-fill theme-toggle-icon text-primary"></i>
+                    </button>
+                    <a href="wishlist.html" class="header-action-btn" title="Wishlist">
+                        <i class="bi bi-heart fs-5"></i>
+                        <span class="badge-counter wishlist-badge d-none">0</span>
+                    </a>
+                    <button type="button" class="header-action-btn header-cart-drawer-btn position-relative" title="Cart Drawer">
+                        <i class="bi bi-cart3 fs-5 text-primary"></i>
+                        <span class="badge-counter cart-badge d-none">0</span>
+                    </button>
+                    <div id="headerAuthLinks" class="d-flex align-items-center gap-2 ms-2">
+                        <a href="login.html" class="btn btn-sm btn-outline-primary">Sign In</a>
+                        <a href="register.html" class="btn btn-sm btn-primary">Register</a>
+                    </div>
+                    <div id="headerUserDropdown" class="dropdown d-none ms-2">
+                        <button class="btn btn-sm btn-light dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle fs-5 text-primary"></i>
+                            <span id="headerUserName" class="fw-semibold">Account</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm">
+                            <li><a class="dropdown-item" href="account.html"><i class="bi bi-person me-2"></i>My Profile</a></li>
+                            <li><a class="dropdown-item" href="orders.html"><i class="bi bi-box-seam me-2"></i>My Orders & Bill</a></li>
+                            <li><a class="dropdown-item" href="wishlist.html"><i class="bi bi-heart me-2"></i>Wishlist</a></li>
+                            <li><a class="dropdown-item text-primary fw-semibold d-none" id="headerAdminLink" href="admin.html"><i class="bi bi-speedometer2 me-2"></i>Admin Dashboard</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item text-danger" onclick="handleLogout()"><i class="bi bi-box-arrow-right me-2"></i>Sign Out</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header & Breadcrumb -->
+    <div class="bg-white border-bottom py-3 mb-4">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-1 small">
+                    <li class="breadcrumb-item"><a href="../index.html">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Hardware Catalog</li>
+                </ol>
+            </nav>
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                <div>
+                    <h1 class="h3 fw-bold mb-0">Laptops & Mobile Phones Catalog</h1>
+                    <span class="text-muted small">Local market specifications with realistic Pakistani Rupee (PKR) pricing</span>
+                </div>
+                <span class="badge bg-light text-dark border p-2" id="catalogResultsCount">Loading products...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Brand Filter Pills Strip -->
+    <div class="container mb-4">
+        <div class="bg-white p-3 rounded-3 border d-flex align-items-center gap-2">
+            <span class="small fw-bold text-muted text-uppercase text-nowrap"><i class="bi bi-funnel me-1"></i> Quick Brand:</span>
+            <div class="brand-filter-bar flex-grow-1" id="shopBrandPillsBar">
+                <button type="button" class="brand-pill active" data-brand="" onclick="selectShopBrand('', this)">All Brands</button>
+                <button type="button" class="brand-pill" data-brand="HP" onclick="selectShopBrand('HP', this)">HP</button>
+                <button type="button" class="brand-pill" data-brand="Dell" onclick="selectShopBrand('Dell', this)">Dell</button>
+                <button type="button" class="brand-pill" data-brand="Lenovo" onclick="selectShopBrand('Lenovo', this)">Lenovo</button>
+                <button type="button" class="brand-pill" data-brand="Apple" onclick="selectShopBrand('Apple', this)">Apple</button>
+                <button type="button" class="brand-pill" data-brand="Samsung" onclick="selectShopBrand('Samsung', this)">Samsung</button>
+                <button type="button" class="brand-pill" data-brand="Sony" onclick="selectShopBrand('Sony', this)">Sony</button>
+                <button type="button" class="brand-pill" data-brand="Motorola" onclick="selectShopBrand('Motorola', this)">Motorola</button>
+                <button type="button" class="brand-pill" data-brand="Nokia" onclick="selectShopBrand('Nokia', this)">Nokia</button>
+                <button type="button" class="brand-pill" data-brand="Vivo" onclick="selectShopBrand('Vivo', this)">Vivo</button>
+                <button type="button" class="brand-pill" data-brand="Oppo" onclick="selectShopBrand('Oppo', this)">Oppo</button>
+                <button type="button" class="brand-pill" data-brand="Asus" onclick="selectShopBrand('Asus', this)">Asus</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Catalog Layout -->
+    <main class="container pb-5">
+        <div class="row g-4">
+            <!-- Sidebar Filters -->
+            <aside class="col-lg-3">
+                <div class="card border-0 shadow-sm rounded-3 p-4 sticky-top bg-white" style="top: 90px; z-index: 1000;">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold mb-0">Filters</h5>
+                        <button type="button" class="btn btn-sm btn-link text-decoration-none p-0 text-muted" onclick="resetFilters()">Reset All</button>
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold text-uppercase small text-muted">Category</label>
+                        <div id="filterCategoryList" class="d-flex flex-column gap-2">
+                            <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                        </div>
+                    </div>
+
+                    <!-- Brand Filter in Sidebar -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold text-uppercase small text-muted">Brand Filter</label>
+                        <select class="form-select form-select-sm" id="sidebarBrandSelect" onchange="handleSidebarBrandChange(this.value)">
+                            <option value="">All Brands</option>
+                            <option value="HP">HP (EliteBook, ProBook)</option>
+                            <option value="Dell">Dell (Latitude, XPS)</option>
+                            <option value="Lenovo">Lenovo (ThinkPad Series)</option>
+                            <option value="Apple">Apple (MacBook & iPhone)</option>
+                            <option value="Samsung">Samsung (Galaxy S24, S23, A55)</option>
+                            <option value="Sony">Sony (VAIO, Audio)</option>
+                            <option value="Motorola">Motorola (Edge, G84)</option>
+                            <option value="Nokia">Nokia (G42, 5G)</option>
+                            <option value="Vivo">Vivo (V30, Y200)</option>
+                            <option value="Oppo">Oppo (Reno 11)</option>
+                            <option value="Asus">Asus (ROG, ZenBook)</option>
+                        </select>
+                    </div>
+
+                    <!-- Price Filter in PKR -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold text-uppercase small text-muted">Price Range (PKR)</label>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text small">PKR</span>
+                                    <input type="number" id="minPriceInput" class="form-control" placeholder="Min" min="0" step="5000" onchange="applyFilters()">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text small">PKR</span>
+                                    <input type="number" id="maxPriceInput" class="form-control" placeholder="Max" min="0" step="10000" onchange="applyFilters()">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-wrap gap-1 mt-2">
+                            <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 small" style="font-size: 0.72rem;" onclick="setPriceRange(0, 100000)">Under 100k</button>
+                            <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 small" style="font-size: 0.72rem;" onclick="setPriceRange(100000, 250000)">100k - 250k</button>
+                            <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 small" style="font-size: 0.72rem;" onclick="setPriceRange(250000, 700000)">Above 250k</button>
+                        </div>
+                    </div>
+
+                    <!-- In Stock Only Filter -->
+                    <div class="mb-4">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="inStockCheck" onchange="applyFilters()">
+                            <label class="form-check-label fw-semibold small" for="inStockCheck">In-Stock Only</label>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn btn-primary w-100 btn-sm" onclick="applyFilters()">
+                        <i class="bi bi-funnel me-1"></i> Apply Filters
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Product Grid & Sorting -->
+            <section class="col-lg-9">
+                <!-- Sorting Bar -->
+                <div class="bg-white p-3 rounded-3 border mb-4 d-flex flex-wrap justify-content-between align-items-center gap-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="small text-muted">Active:</span>
+                        <div id="activeFilterTags" class="d-flex flex-wrap gap-1">
+                            <span class="badge bg-light text-muted border">None</span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2 ms-auto">
+                        <label for="sortSelect" class="small text-muted text-nowrap">Sort By:</label>
+                        <select class="form-select form-select-sm" id="sortSelect" style="width: auto;" onchange="applyFilters()">
+                            <option value="newest">Newest First</option>
+                            <option value="price_asc">Price: Low to High</option>
+                            <option value="price_desc">Price: High to Low</option>
+                            <option value="rating">Highest Rated</option>
+                            <option value="bestseller">Best Sellers</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Products Grid Container -->
+                <div class="row" id="catalogProductsContainer">
+                    <div class="col-12 text-center py-5">
+                        <div class="spinner-border text-primary" role="status"></div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <nav class="mt-4 d-flex justify-content-center" id="catalogPagination" aria-label="Catalog pages">
+                </nav>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer-shall py-4 mt-5 bg-dark text-white text-center">
+        <div class="container">
+            <p class="mb-1">&copy; 2026 PixelMart &bull; MOBILE &bull; LAPTOP &bull; GADGETS &bull; Quetta, Balochistan. Contact: 00816-23-736822</p>
+            <span class="small text-secondary">All hardware specifications verified. 1-Year Local Warranty & Instant Printed Receipt.</span>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/main.js"></script>
+
+    <!-- Catalog Logic -->
+    <script>
+        let currentCategories = [];
+        let currentPage = 1;
+        let selectedBrand = '';
+        let debounceTimer = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadCategoriesSidebar();
+            parseUrlParams();
+            loadProducts();
+        });
+
+        function parseUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('category')) {
+                const catRadio = document.querySelector(`input[name="categoryFilter"][value="${params.get('category')}"]`);
+                if (catRadio) catRadio.checked = true;
+            }
+            if (params.get('brand')) {
+                selectedBrand = params.get('brand');
+                document.getElementById('sidebarBrandSelect').value = selectedBrand;
+                syncBrandPills(selectedBrand);
+            }
+            if (params.get('min_price')) document.getElementById('minPriceInput').value = params.get('min_price');
+            if (params.get('max_price')) document.getElementById('maxPriceInput').value = params.get('max_price');
+            if (params.get('sort')) document.getElementById('sortSelect').value = params.get('sort');
+            if (params.get('in_stock')) document.getElementById('inStockCheck').checked = (params.get('in_stock') === 'true');
+            if (params.get('search')) {
+                document.getElementById('topSearchInput').value = params.get('search');
+            }
+            if (params.get('page')) currentPage = parseInt(params.get('page')) || 1;
+        }
+
+        async function loadCategoriesSidebar() {
+            const container = document.getElementById('filterCategoryList');
+            try {
+                const res = await API.products.categories();
+                currentCategories = Array.isArray(res) ? res : (res.results || []);
+                container.innerHTML = `
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="categoryFilter" id="catAll" value="" checked onchange="applyFilters()">
+                        <label class="form-check-label small" for="catAll">All Categories</label>
+                    </div>
+                ` + currentCategories.map(c => `
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="categoryFilter" id="cat_${c.slug}" value="${c.slug}" onchange="applyFilters()">
+                        <label class="form-check-label small d-flex justify-content-between" for="cat_${c.slug}">
+                            <span>${c.name}</span>
+                            <span class="text-muted">(${c.product_count})</span>
+                        </label>
+                    </div>
+                `).join('');
+            } catch (e) {
+                container.innerHTML = '<span class="text-muted small">Could not load categories.</span>';
+            }
+        }
+
+        function syncBrandPills(brand) {
+            document.querySelectorAll('#shopBrandPillsBar .brand-pill').forEach(btn => {
+                if (btn.getAttribute('data-brand') === (brand || '')) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        function selectShopBrand(brand, btnEl) {
+            selectedBrand = brand;
+            document.getElementById('sidebarBrandSelect').value = brand;
+            syncBrandPills(brand);
+            applyFilters();
+        }
+
+        function handleSidebarBrandChange(val) {
+            selectedBrand = val;
+            syncBrandPills(val);
+            applyFilters();
+        }
+
+        function setPriceRange(min, max) {
+            document.getElementById('minPriceInput').value = min;
+            document.getElementById('maxPriceInput').value = max;
+            applyFilters();
+        }
+
+        function debounceApplyFilters() {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                applyFilters();
+            }, 300);
+        }
+
+        async function loadProducts(page = currentPage) {
+            currentPage = page;
+            const container = document.getElementById('catalogProductsContainer');
+            container.innerHTML = '<div class="col-12 text-center py-5"><div class="spinner-border text-primary" role="status"></div></div>';
+
+            const queryParams = new URLSearchParams();
+            const selectedCategory = document.querySelector('input[name="categoryFilter"]:checked')?.value;
+            const minPrice = document.getElementById('minPriceInput').value;
+            const maxPrice = document.getElementById('maxPriceInput').value;
+            const sort = document.getElementById('sortSelect').value;
+            const inStock = document.getElementById('inStockCheck').checked;
+            const search = document.getElementById('topSearchInput').value.trim();
+
+            if (selectedCategory) queryParams.set('category', selectedCategory);
+            if (selectedBrand) queryParams.set('brand', selectedBrand);
+            if (minPrice) queryParams.set('min_price', minPrice);
+            if (maxPrice) queryParams.set('max_price', maxPrice);
+            if (sort) queryParams.set('sort', sort);
+            if (inStock) queryParams.set('in_stock', 'true');
+            if (search) queryParams.set('search', search);
+            if (page > 1) queryParams.set('page', page);
+
+            // Update browser URL without reload
+            const newRelativePathQuery = window.location.pathname + '?' + queryParams.toString();
+            history.replaceState(null, '', newRelativePathQuery);
+
+            updateActiveFilterTags(selectedCategory, selectedBrand, minPrice, maxPrice, search);
+
+            try {
+                const res = await API.products.list(queryParams.toString());
+                const products = res.results || res;
+                const totalCount = res.count !== undefined ? res.count : products.length;
+
+                document.getElementById('catalogResultsCount').textContent = `Showing ${products.length} of ${totalCount} items`;
+
+                if (products.length === 0) {
+                    container.innerHTML = `
+                        <div class="col-12">
+                            <div class="empty-state text-center py-5 bg-white rounded-3 border">
+                                <i class="bi bi-search empty-state-icon fs-1 text-muted mb-2 d-block"></i>
+                                <h4 class="fw-bold">No Products Found</h4>
+                                <p class="text-muted small">No laptops or phones matched your current filters. Try relaxing your filters or search term.</p>
+                                <button class="btn btn-outline-primary btn-sm" onclick="resetFilters()">Clear Filters</button>
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById('catalogPagination').innerHTML = '';
+                    return;
+                }
+
+                container.innerHTML = products.map(p => createProductCardHTML(p, '')).join('');
+                renderPagination(res, page);
+            } catch (e) {
+                container.innerHTML = `
+                    <div class="col-12 text-center py-5 text-danger">
+                        <i class="bi bi-exclamation-circle fs-1 mb-2 d-block"></i>
+                        <h5>Unable to load products</h5>
+                        <p class="small text-muted">${e.message || 'Please verify the backend server is running.'}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function updateActiveFilterTags(cat, brand, min, max, search) {
+            const tags = document.getElementById('activeFilterTags');
+            const items = [];
+            if (cat) items.push(`<span class="badge bg-primary-subtle text-primary border">${cat}</span>`);
+            if (brand) items.push(`<span class="badge bg-info-subtle text-info border">Brand: ${brand}</span>`);
+            if (min) items.push(`<span class="badge bg-light text-dark border">Min: ${formatPKR(min)}</span>`);
+            if (max) items.push(`<span class="badge bg-light text-dark border">Max: ${formatPKR(max)}</span>`);
+            if (search) items.push(`<span class="badge bg-warning-subtle text-dark border">"${search}"</span>`);
+            tags.innerHTML = items.length > 0 ? items.join(' ') : '<span class="badge bg-light text-muted border">None</span>';
+        }
+
+        function renderPagination(res, activePage) {
+            const paginationEl = document.getElementById('catalogPagination');
+            if (!res.count || res.count <= 12) {
+                paginationEl.innerHTML = '';
+                return;
+            }
+
+            const totalPages = Math.ceil(res.count / 12);
+            let html = '<ul class="pagination pagination-sm">';
+
+            // Previous
+            html += `<li class="page-item ${activePage === 1 ? 'disabled' : ''}">
+                <button class="page-link" onclick="loadProducts(${activePage - 1})">&laquo; Prev</button>
+            </li>`;
+
+            for (let i = 1; i <= totalPages; i++) {
+                html += `<li class="page-item ${i === activePage ? 'active' : ''}">
+                    <button class="page-link" onclick="loadProducts(${i})">${i}</button>
+                </li>`;
+            }
+
+            // Next
+            html += `<li class="page-item ${activePage === totalPages ? 'disabled' : ''}">
+                <button class="page-link" onclick="loadProducts(${activePage + 1})">Next &raquo;</button>
+            </li>`;
+
+            html += '</ul>';
+            paginationEl.innerHTML = html;
+        }
+
+        function applyFilters() {
+            loadProducts(1);
+        }
+
+        function resetFilters() {
+            const allCat = document.getElementById('catAll');
+            if (allCat) allCat.checked = true;
+            selectedBrand = '';
+            document.getElementById('sidebarBrandSelect').value = '';
+            syncBrandPills('');
+            document.getElementById('minPriceInput').value = '';
+            document.getElementById('maxPriceInput').value = '';
+            document.getElementById('inStockCheck').checked = false;
+            document.getElementById('topSearchInput').value = '';
+            document.getElementById('sortSelect').value = 'newest';
+            loadProducts(1);
+        }
+    </script>
+</body>
+</html>

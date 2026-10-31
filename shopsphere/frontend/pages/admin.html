@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PixelMart Operations Hub &mdash; MOBILE • LAPTOP • GADGETS | Quetta</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../assets/css/style.css" rel="stylesheet">
+    <script>
+        (function(){
+            const saved = localStorage.getItem('pixelmart_theme') || localStorage.getItem('shall_shop_theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', saved);
+            document.documentElement.setAttribute('data-bs-theme', saved);
+        })();
+    </script>
+</head>
+<body class="bg-light">
+
+    <!-- Admin Header -->
+    <header class="navbar navbar-expand-lg navbar-dark bg-dark py-2">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand text-white fw-bold d-flex align-items-center gap-2" href="admin.html">
+                <img src="../assets/images/pixelmart-logo.png" alt="PixelMart Logo" style="height: 34px;">
+                <span>Pixel<span class="text-coral">Mart</span> <span class="badge bg-secondary fs-6 ms-1">Operations Hub</span></span>
+            </a>
+            <div class="d-flex align-items-center gap-3">
+                <button type="button" class="btn btn-sm btn-outline-light theme-toggle-btn" title="Toggle Dark/Light Mode" aria-label="Toggle Theme">
+                    <i class="bi bi-moon-stars-fill theme-toggle-icon"></i>
+                </button>
+                <a href="../index.html" class="btn btn-sm btn-outline-light"><i class="bi bi-box-arrow-up-right me-1"></i> View Live Store</a>
+                <a href="/admin/" target="_blank" class="btn btn-sm btn-outline-info"><i class="bi bi-gear-fill me-1"></i> Django Admin</a>
+                <button type="button" class="btn btn-sm btn-danger" onclick="handleLogout()"><i class="bi bi-box-arrow-right me-1"></i> Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container-fluid px-4 py-4">
+        <!-- Title & Navigation Tabs -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+            <div>
+                <h1 class="h3 fw-bold mb-1">Commerce Management & Analytics</h1>
+                <p class="text-muted small mb-0">Oversee orders, manage products & inventory, configure discounts, and view customers.</p>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="#" id="btnExportCSV" class="btn btn-success btn-sm">
+                    <i class="bi bi-file-earmark-spreadsheet me-1"></i> Export Sales CSV
+                </a>
+            </div>
+        </div>
+
+        <!-- Operations Navigation Tabs -->
+        <ul class="nav nav-pills mb-4 bg-white p-2 rounded-3 shadow-sm border" id="adminTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="tab-overview-btn" data-bs-toggle="pill" data-bs-target="#tab-overview" type="button" role="tab"><i class="bi bi-graph-up me-1"></i> Overview & KPIs</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="tab-products-btn" data-bs-toggle="pill" data-bs-target="#tab-products" type="button" role="tab" onclick="loadAdminProducts()"><i class="bi bi-box-seam me-1"></i> Product Catalog</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="tab-categories-btn" data-bs-toggle="pill" data-bs-target="#tab-categories" type="button" role="tab" onclick="loadAdminCategories()"><i class="bi bi-tags me-1"></i> Categories</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="tab-orders-btn" data-bs-toggle="pill" data-bs-target="#tab-orders" type="button" role="tab" onclick="loadAdminOrders()"><i class="bi bi-cart-check me-1"></i> Orders</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="tab-customers-btn" data-bs-toggle="pill" data-bs-target="#tab-customers" type="button" role="tab" onclick="loadAdminCustomers()"><i class="bi bi-people me-1"></i> Customers</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="tab-coupons-btn" data-bs-toggle="pill" data-bs-target="#tab-coupons" type="button" role="tab" onclick="loadAdminCoupons()"><i class="bi bi-ticket-perforated me-1"></i> Discounts & Coupons</button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="adminTabsContent">
+
+            <!-- TAB 1: OVERVIEW & KPIS -->
+            <div class="tab-pane fade show active" id="tab-overview" role="tabpanel">
+                <!-- Metric KPI Cards -->
+                <div class="row g-3 mb-4" id="kpiContainer">
+                    <div class="col-sm-6 col-xl-2">
+                        <div class="card border-0 shadow-sm rounded-3 p-3 bg-white h-100">
+                            <span class="text-muted small fw-semibold text-uppercase">Net Revenue</span>
+                            <h3 class="fw-bold text-success my-1" id="kpiRevenue">$0.00</h3>
+                            <span class="small text-muted" style="font-size: 0.75rem;">Paid & confirmed</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-2">
+                        <div class="card border-0 shadow-sm rounded-3 p-3 bg-white h-100">
+                            <span class="text-muted small fw-semibold text-uppercase">Total Orders</span>
+                            <h3 class="fw-bold text-dark my-1" id="kpiOrders">0</h3>
+                            <span class="small text-muted" style="font-size: 0.75rem;">Lifetime orders</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-2">
+                        <div class="card border-0 shadow-sm rounded-3 p-3 bg-white h-100">
+                            <span class="text-muted small fw-semibold text-uppercase">Pending Orders</span>
+                            <h3 class="fw-bold text-warning my-1" id="kpiPending">0</h3>
+                            <span class="small text-muted" style="font-size: 0.75rem;">Awaiting dispatch</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-2">
+                        <div class="card border-0 shadow-sm rounded-3 p-3 bg-white h-100">
+                            <span class="text-muted small fw-semibold text-uppercase">Registered Buyers</span>
+                            <h3 class="fw-bold text-purple my-1" id="kpiCustomers">0</h3>
+                            <span class="small text-muted" style="font-size: 0.75rem;">Customer accounts</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-2">
+                        <div class="card border-0 shadow-sm rounded-3 p-3 bg-white h-100">
+                            <span class="text-muted small fw-semibold text-uppercase">Active Catalog</span>
+                            <h3 class="fw-bold text-dark my-1" id="kpiProducts">0</h3>
+                            <span class="small text-muted" style="font-size: 0.75rem;">Live flagship SKUs</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-2">
+                        <div class="card border-0 shadow-sm rounded-3 p-3 bg-white h-100">
+                            <span class="text-muted small fw-semibold text-uppercase">Low Stock Alert</span>
+                            <h3 class="fw-bold text-danger my-1" id="kpiLowStock">0</h3>
+                            <span class="small text-muted" style="font-size: 0.75rem;">Stock &le; 5 units</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Orders and Low Stock Alert row -->
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <div class="card border-0 shadow-sm rounded-3 bg-white p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="fw-bold mb-0">Recent Customer Orders</h5>
+                                <button type="button" class="btn btn-sm btn-outline-primary" onclick="switchTab('tab-orders-btn')">View All Orders &rarr;</button>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle small mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Order #</th>
+                                            <th>Date</th>
+                                            <th>Customer</th>
+                                            <th>Total</th>
+                                            <th>Payment</th>
+                                            <th>Status</th>
+                                            <th class="text-end">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="overviewOrdersTableBody">
+                                        <tr><td colspan="7" class="text-center py-4"><div class="spinner-border spinner-border-sm text-primary"></div></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card border-0 shadow-sm rounded-3 bg-white p-4 mb-4">
+                            <h5 class="fw-bold mb-3"><i class="bi bi-exclamation-triangle text-danger me-2"></i>Low Stock Inventory</h5>
+                            <div id="adminLowStockList" class="d-flex flex-column gap-2">
+                                <div class="text-center py-3"><div class="spinner-border spinner-border-sm text-primary"></div></div>
+                            </div>
+                        </div>
+                        <div class="card border-0 shadow-sm rounded-3 bg-white p-4">
+                            <h6 class="fw-bold mb-2"><i class="bi bi-shield-check text-purple me-2"></i>Full Django Administration</h6>
+                            <p class="text-muted small mb-3">
+                                Fine-grained permissions, user groups, database models, and log audit history are accessible via the native Django Admin panel.
+                            </p>
+                            <a href="/admin/" target="_blank" class="btn btn-outline-primary btn-sm w-100">
+                                Open Django Admin &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: PRODUCT CATALOG MANAGEMENT -->
+            <div class="tab-pane fade" id="tab-products" role="tabpanel">
+                <div class="card border-0 shadow-sm rounded-3 bg-white p-4">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+                        <h5 class="fw-bold mb-0">Products Catalog</h5>
+                        <div class="d-flex gap-2">
+                            <input type="text" id="adminProductSearch" class="form-control form-control-sm" placeholder="Search product name, SKU..." onkeyup="filterAdminProducts(event)">
+                            <button type="button" class="btn btn-primary btn-sm text-nowrap" onclick="openProductModal('add')">
+                                <i class="bi bi-plus-lg me-1"></i> Add Product
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle small mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Product Name & SKU</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Sale Price</th>
+                                    <th>Stock</th>
+                                    <th>Status</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminProductsTableBody">
+                                <tr><td colspan="8" class="text-center py-4"><div class="spinner-border spinner-border-sm text-primary"></div></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: CATEGORY MANAGEMENT -->
+            <div class="tab-pane fade" id="tab-categories" role="tabpanel">
+                <div class="card border-0 shadow-sm rounded-3 bg-white p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold mb-0">Product Categories</h5>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="openCategoryModal()">
+                            <i class="bi bi-plus-lg me-1"></i> Add Category
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle small mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Slug</th>
+                                    <th>Products Count</th>
+                                    <th>Featured</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminCategoriesTableBody">
+                                <tr><td colspan="5" class="text-center py-4"><div class="spinner-border spinner-border-sm text-primary"></div></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 4: ORDERS MANAGEMENT -->
+            <div class="tab-pane fade" id="tab-orders" role="tabpanel">
+                <div class="card border-0 shadow-sm rounded-3 bg-white p-4">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+                        <h5 class="fw-bold mb-0">Order Management</h5>
+                        <div class="d-flex gap-2">
+                            <select class="form-select form-select-sm" id="adminOrderStatusFilter" onchange="loadAdminOrders()" style="width: auto;">
+                                <option value="">All Statuses</option>
+                                <option value="PENDING">Pending</option>
+                                <option value="CONFIRMED">Confirmed</option>
+                                <option value="PROCESSING">Processing</option>
+                                <option value="SHIPPED">Shipped</option>
+                                <option value="DELIVERED">Delivered</option>
+                                <option value="CANCELLED">Cancelled</option>
+                            </select>
+                            <input type="text" id="adminOrderSearchInput" class="form-control form-control-sm" placeholder="Search order #, customer..." onkeyup="filterAdminOrders(event)">
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle small mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Order #</th>
+                                    <th>Date</th>
+                                    <th>Customer</th>
+                                    <th>Total</th>
+                                    <th>Payment</th>
+                                    <th>Status</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminOrdersFullTableBody">
+                                <tr><td colspan="7" class="text-center py-4"><div class="spinner-border spinner-border-sm text-primary"></div></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 5: CUSTOMER DIRECTORY -->
+            <div class="tab-pane fade" id="tab-customers" role="tabpanel">
+                <div class="card border-0 shadow-sm rounded-3 bg-white p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold mb-0">Registered Customers Directory</h5>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle small mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Customer Name</th>
+                                    <th>Email</th>
+                                    <th>Username</th>
+                                    <th>Date Joined</th>
+                                    <th>Role</th>
+                                    <th>Total Orders</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminCustomersTableBody">
+                                <tr><td colspan="6" class="text-center py-4"><div class="spinner-border spinner-border-sm text-primary"></div></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 6: DISCOUNTS & COUPONS -->
+            <div class="tab-pane fade" id="tab-coupons" role="tabpanel">
+                <div class="card border-0 shadow-sm rounded-3 bg-white p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold mb-0">Discounts & Vouchers</h5>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="openCouponModal()">
+                            <i class="bi bi-plus-lg me-1"></i> Add Coupon
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle small mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Coupon Code</th>
+                                    <th>Discount Type</th>
+                                    <th>Value</th>
+                                    <th>Min Order</th>
+                                    <th>Times Used</th>
+                                    <th>Status</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminCouponsTableBody">
+                                <tr><td colspan="7" class="text-center py-4"><div class="spinner-border spinner-border-sm text-primary"></div></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- MODAL: Update Order Status -->
+    <div class="modal fade" id="updateStatusModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4 p-4">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold">Update Order Status</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateStatusForm" onsubmit="handleSaveOrderStatus(event)">
+                        <input type="hidden" id="modalOrderId">
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">New Status</label>
+                            <select class="form-select" id="modalStatusSelect" required>
+                                <option value="PENDING">PENDING (Awaiting confirmation)</option>
+                                <option value="CONFIRMED">CONFIRMED (Ready to pack)</option>
+                                <option value="PROCESSING">PROCESSING (Packing in warehouse)</option>
+                                <option value="SHIPPED">SHIPPED (Handed to courier)</option>
+                                <option value="DELIVERED">DELIVERED (Fulfilled)</option>
+                                <option value="CANCELLED">CANCELLED (Restores inventory)</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label small fw-semibold">Staff Note (Optional)</label>
+                            <textarea class="form-control" id="modalStatusNote" rows="2" placeholder="Tracking code, courier details..."></textarea>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary" id="btnSaveStatus">Update Status</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Add / Edit Product -->
+    <div class="modal fade" id="productFormModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4 p-4">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold" id="productModalTitle">Add New Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="productForm" onsubmit="handleSaveProduct(event)">
+                        <input type="hidden" id="prodEditSlug">
+                        <div class="row g-3">
+                            <div class="col-md-8">
+                                <label class="form-label small fw-semibold">Product Name *</label>
+                                <input type="text" class="form-control" id="prodName" required placeholder="e.g. Apple iPhone 17 Pro">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-semibold">SKU *</label>
+                                <input type="text" class="form-control" id="prodSku" required placeholder="SKU-XXX-01">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold">Category *</label>
+                                <select class="form-select" id="prodCategory" required>
+                                    <option value="">-- Choose Category --</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label small fw-semibold">Regular Price ($) *</label>
+                                <input type="number" step="0.01" class="form-control" id="prodPrice" required min="0" placeholder="99.99">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label small fw-semibold">Sale Price ($)</label>
+                                <input type="number" step="0.01" class="form-control" id="prodSalePrice" min="0" placeholder="Optional">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-semibold">Stock Quantity *</label>
+                                <input type="number" class="form-control" id="prodStock" required min="0" value="50">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold">Main Image URL (Unsplash or CDN) *</label>
+                                <input type="url" class="form-control" id="prodImageUrl" placeholder="https://images.unsplash.com/...">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold">Additional Gallery Images (comma-separated URLs)</label>
+                                <input type="text" class="form-control" id="prodGalleryUrls" placeholder="https://..., https://...">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-semibold">Short Summary Description</label>
+                                <input type="text" class="form-control" id="prodShortDesc" placeholder="Brief 1-sentence product summary">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-semibold">Detailed Description *</label>
+                                <textarea class="form-control" id="prodDesc" rows="4" required placeholder="Full product specs, materials, and features..."></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check form-switch mt-2">
+                                    <input class="form-check-input" type="checkbox" id="prodIsActive" checked>
+                                    <label class="form-check-label fw-semibold small" for="prodIsActive">Active (Visible in public store)</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check form-switch mt-2">
+                                    <input class="form-check-input" type="checkbox" id="prodIsFeatured">
+                                    <label class="form-check-label fw-semibold small" for="prodIsFeatured">Featured on Homepage</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary" id="btnSaveProduct">Save Product</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Add Category -->
+    <div class="modal fade" id="categoryFormModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4 p-4">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold">Add New Category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="categoryForm" onsubmit="handleSaveCategory(event)">
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Category Name *</label>
+                            <input type="text" class="form-control" id="catName" required placeholder="e.g. Smart Wearables">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Slug (Optional, auto-generated)</label>
+                            <input type="text" class="form-control" id="catSlug" placeholder="smart-wearables">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Description</label>
+                            <textarea class="form-control" id="catDesc" rows="2" placeholder="Brief description of department..."></textarea>
+                        </div>
+                        <div class="form-check form-switch mb-4">
+                            <input class="form-check-input" type="checkbox" id="catIsFeatured" checked>
+                            <label class="form-check-label fw-semibold small" for="catIsFeatured">Feature on Homepage</label>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary" id="btnSaveCategory">Create Category</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Add Coupon -->
+    <div class="modal fade" id="couponFormModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4 p-4">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold">Create Discount Coupon</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="couponForm" onsubmit="handleSaveCoupon(event)">
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Coupon Code *</label>
+                            <input type="text" class="form-control text-uppercase" id="coupCode" required placeholder="e.g. VIP20">
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="form-label small fw-semibold">Discount Type</label>
+                                <select class="form-select" id="coupType">
+                                    <option value="PERCENTAGE">Percentage (%)</option>
+                                    <option value="FIXED">Fixed Amount ($)</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small fw-semibold">Value *</label>
+                                <input type="number" step="0.01" class="form-control" id="coupValue" required min="1" placeholder="10">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Minimum Order Subtotal ($)</label>
+                            <input type="number" step="0.01" class="form-control" id="coupMinAmount" min="0" value="0.00">
+                        </div>
+                        <div class="form-check form-switch mb-4">
+                            <input class="form-check-input" type="checkbox" id="coupIsActive" checked>
+                            <label class="form-check-label fw-semibold small" for="coupIsActive">Coupon Active Immediately</label>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary" id="btnSaveCoupon">Create Coupon</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/main.js"></script>
+
+    <script>
+        let cachedCategories = [];
+        let allProductsCache = [];
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const status = await API.auth.status();
+            if (!status.is_authenticated || !status.user || !status.user.is_staff) {
+                showToast('Staff access required. Please sign in with staff account.', 'error');
+                window.location.href = 'login.html?next=admin.html';
+                return;
+            }
+
+            document.getElementById('btnExportCSV').href = API.admin.exportCSVUrl();
+            await loadDashboardData();
+            await loadAdminOrders();
+            loadCategoryDropdown();
+        });
+
+        function switchTab(tabButtonId) {
+            const triggerEl = document.getElementById(tabButtonId);
+            if (triggerEl) {
+                const tab = new bootstrap.Tab(triggerEl);
+                tab.show();
+            }
+        }
+
+        // ==========================================
+        // 1. DASHBOARD & KPIS
+        // ==========================================
+        async function loadDashboardData() {
+            try {
+                const data = await API.admin.metrics();
+                const m = data.metrics;
+                document.getElementById('kpiRevenue').textContent = `$${parseFloat(m.total_revenue).toFixed(2)}`;
+                document.getElementById('kpiOrders').textContent = m.total_orders;
+                document.getElementById('kpiPending').textContent = m.pending_orders;
+                document.getElementById('kpiCustomers').textContent = m.total_customers;
+                document.getElementById('kpiProducts').textContent = m.total_active_products;
+                document.getElementById('kpiLowStock').textContent = m.low_stock_products;
+
+                // Render low stock list
+                const lowStockContainer = document.getElementById('adminLowStockList');
+                if (data.low_stock_items && data.low_stock_items.length > 0) {
+                    lowStockContainer.innerHTML = data.low_stock_items.map(p => `
+                        <div class="p-2 border rounded-2 d-flex justify-content-between align-items-center bg-light">
+                            <div>
+                                <strong class="d-block small text-truncate" style="max-width: 180px;">${p.name}</strong>
+                                <span class="text-muted" style="font-size: 0.75rem;">SKU: ${p.sku}</span>
+                            </div>
+                            <span class="badge ${p.stock === 0 ? 'bg-danger' : 'bg-warning text-dark'}">
+                                ${p.stock} units left
+                            </span>
+                        </div>
+                    `).join('');
+                } else {
+                    lowStockContainer.innerHTML = '<span class="text-success small"><i class="bi bi-check-circle me-1"></i> All products comfortably stocked.</span>';
+                }
+            } catch (e) {
+                showToast(e.message || 'Failed to load dashboard metrics.', 'error');
+            }
+        }
+
+        // ==========================================
+        // 2. ORDERS MANAGEMENT
+        // ==========================================
+        async function loadAdminOrders(search = '') {
+            const overviewTbody = document.getElementById('overviewOrdersTableBody');
+            const fullTbody = document.getElementById('adminOrdersFullTableBody');
+            const statusFilter = document.getElementById('adminOrderStatusFilter')?.value || '';
+
+            let query = [];
+            if (search) query.push(`search=${encodeURIComponent(search)}`);
+            if (statusFilter) query.push(`status=${encodeURIComponent(statusFilter)}`);
+            const queryString = query.length > 0 ? '?' + query.join('&') : '';
+
+            try {
+                const res = await API.admin.orders(queryString);
+                const orders = res.results || res;
+
+                const renderRow = (o) => `
+                    <tr>
+                        <td><span class="font-monospace fw-bold">${o.order_number}</span></td>
+                        <td>${new Date(o.created_at).toLocaleDateString()}</td>
+                        <td>
+                            <div>${o.customer_name}</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">${o.customer_email}</div>
+                        </td>
+                        <td><strong>$${parseFloat(o.total_amount).toFixed(2)}</strong></td>
+                        <td>
+                            <span class="badge ${o.payment_status === 'PAID' ? 'bg-success' : 'bg-secondary'}">${o.payment_status}</span>
+                        </td>
+                        <td>
+                            <span class="badge ${getStatusBadgeClass(o.status)}">${o.status}</span>
+                        </td>
+                        <td class="text-end">
+                            <button class="btn btn-sm btn-outline-primary" onclick="openUpdateStatusModal(${o.id}, '${o.status}')">
+                                Status
+                            </button>
+                        </td>
+                    </tr>
+                `;
+
+                if (orders.length === 0) {
+                    const emptyRow = '<tr><td colspan="7" class="text-center py-4 text-muted">No orders found.</td></tr>';
+                    if (overviewTbody) overviewTbody.innerHTML = emptyRow;
+                    if (fullTbody) fullTbody.innerHTML = emptyRow;
+                    return;
+                }
+
+                if (overviewTbody) overviewTbody.innerHTML = orders.slice(0, 5).map(renderRow).join('');
+                if (fullTbody) fullTbody.innerHTML = orders.map(renderRow).join('');
+            } catch (e) {
+                if (overviewTbody) overviewTbody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-danger">Failed to load orders.</td></tr>';
+            }
+        }
+
+        function filterAdminOrders(e) {
+            if (e.key === 'Enter') {
+                loadAdminOrders(e.target.value.trim());
+            }
+        }
+
+        function getStatusBadgeClass(status) {
+            switch (status) {
+                case 'DELIVERED': return 'bg-success';
+                case 'SHIPPED': return 'bg-info text-dark';
+                case 'PROCESSING':
+                case 'CONFIRMED': return 'bg-purple';
+                case 'CANCELLED': return 'bg-danger';
+                default: return 'bg-warning text-dark';
+            }
+        }
+
+        function openUpdateStatusModal(orderId, currentStatus) {
+            document.getElementById('modalOrderId').value = orderId;
+            document.getElementById('modalStatusSelect').value = currentStatus;
+            document.getElementById('modalStatusNote').value = '';
+            const modal = new bootstrap.Modal(document.getElementById('updateStatusModal'));
+            modal.show();
+        }
+
+        async function handleSaveOrderStatus(e) {
+            e.preventDefault();
+            const orderId = document.getElementById('modalOrderId').value;
+            const newStatus = document.getElementById('modalStatusSelect').value;
+            const note = document.getElementById('modalStatusNote').value.trim();
+            const btn = document.getElementById('btnSaveStatus');
+
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+
+            try {
+                await API.admin.updateOrderStatus(orderId, newStatus, note);
+                showToast(`Order status updated to ${newStatus}.`, 'success');
+                const modalEl = document.getElementById('updateStatusModal');
+                const modal = bootstrap.Modal.getInstance(modalEl);
+                if (modal) modal.hide();
+                loadAdminOrders();
+                loadDashboardData();
+            } catch (err) {
+                showToast(err.message || 'Status update failed.', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'Update Status';
+            }
+        }
+
+        // ==========================================
+        // 3. PRODUCT CATALOG MANAGEMENT
+        // ==========================================
+        async function loadAdminProducts(search = '') {
+            const tbody = document.getElementById('adminProductsTableBody');
+            try {
+                const res = await API.admin.products(search ? `search=${encodeURIComponent(search)}` : '');
+                const products = res.results || res;
+                allProductsCache = products;
+
+                if (products.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-muted">No products found.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = products.map(p => `
+                    <tr>
+                        <td>
+                            <img src="${p.main_image || p.image_url || '../assets/images/placeholder.jpg'}" alt="${p.name}" class="rounded border" style="width: 44px; height: 44px; object-fit: cover;">
+                        </td>
+                        <td>
+                            <strong>${p.name}</strong>
+                            <div class="text-muted" style="font-size: 0.75rem;">SKU: ${p.sku} • Slug: ${p.slug}</div>
+                        </td>
+                        <td>${p.category_name || '-'}</td>
+                        <td><strong>$${parseFloat(p.price).toFixed(2)}</strong></td>
+                        <td>${p.sale_price ? `<span class="text-danger fw-bold">$${parseFloat(p.sale_price).toFixed(2)}</span>` : '<span class="text-muted">-</span>'}</td>
+                        <td>
+                            <span class="badge ${p.stock === 0 ? 'bg-danger' : p.stock <= 5 ? 'bg-warning text-dark' : 'bg-success'}">
+                                ${p.stock} units
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge ${p.is_featured ? 'bg-purple' : 'bg-light text-muted border'}">${p.is_featured ? 'Featured' : 'Standard'}</span>
+                        </td>
+                        <td class="text-end">
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-outline-primary" onclick="openProductModal('edit', '${p.slug}')" title="Edit Product">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline-danger" onclick="handleDeleteProduct('${p.slug}', '${p.name.replace(/'/g, "\\'")}')" title="Delete Product">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (e) {
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-danger">Failed to load product catalog.</td></tr>';
+            }
+        }
+
+        function filterAdminProducts(e) {
+            if (e.key === 'Enter') {
+                loadAdminProducts(e.target.value.trim());
+            }
+        }
+
+        async function loadCategoryDropdown() {
+            try {
+                const res = await API.admin.categories();
+                const cats = Array.isArray(res) ? res : (res.results || []);
+                cachedCategories = cats;
+                const select = document.getElementById('prodCategory');
+                select.innerHTML = '<option value="">-- Choose Category --</option>' + cats.map(c => `
+                    <option value="${c.id}">${c.name}</option>
+                `).join('');
+            } catch (e) {
+                console.error("Could not load categories dropdown", e);
+            }
+        }
+
+        function openProductModal(mode, slug = '') {
+            document.getElementById('productForm').reset();
+            const modalTitle = document.getElementById('productModalTitle');
+            const editSlugInput = document.getElementById('prodEditSlug');
+
+            if (mode === 'edit' && slug) {
+                modalTitle.textContent = 'Edit Product Details';
+                editSlugInput.value = slug;
+                const p = allProductsCache.find(x => x.slug === slug);
+                if (p) {
+                    document.getElementById('prodName').value = p.name;
+                    document.getElementById('prodSku').value = p.sku;
+                    document.getElementById('prodCategory').value = p.category;
+                    document.getElementById('prodPrice').value = p.price;
+                    document.getElementById('prodSalePrice').value = p.sale_price || '';
+                    document.getElementById('prodStock').value = p.stock;
+                    document.getElementById('prodImageUrl').value = p.image_url || '';
+                    const galleryOnly = (p.all_images || []).filter(u => u !== p.image_url && u !== p.main_image);
+                    document.getElementById('prodGalleryUrls').value = galleryOnly.join(', ');
+                    document.getElementById('prodShortDesc').value = p.short_description || '';
+                    document.getElementById('prodDesc').value = p.description || p.short_description || '';
+                    document.getElementById('prodIsActive').checked = p.is_active !== false;
+                    document.getElementById('prodIsFeatured').checked = !!p.is_featured;
+                }
+            } else {
+                modalTitle.textContent = 'Add New Product';
+                editSlugInput.value = '';
+                document.getElementById('prodGalleryUrls').value = '';
+            }
+
+            const modal = new bootstrap.Modal(document.getElementById('productFormModal'));
+            modal.show();
+        }
+
+        async function handleSaveProduct(e) {
+            e.preventDefault();
+            const editSlug = document.getElementById('prodEditSlug').value;
+            const btn = document.getElementById('btnSaveProduct');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Saving...';
+
+            const payload = {
+                name: document.getElementById('prodName').value.trim(),
+                sku: document.getElementById('prodSku').value.trim(),
+                category: parseInt(document.getElementById('prodCategory').value),
+                price: parseFloat(document.getElementById('prodPrice').value),
+                stock: parseInt(document.getElementById('prodStock').value),
+                image_url: document.getElementById('prodImageUrl').value.trim(),
+                short_description: document.getElementById('prodShortDesc').value.trim(),
+                description: document.getElementById('prodDesc').value.trim(),
+                is_active: document.getElementById('prodIsActive').checked,
+                is_featured: document.getElementById('prodIsFeatured').checked
+            };
+
+            const galleryInput = document.getElementById('prodGalleryUrls').value.trim();
+            if (galleryInput) {
+                payload.gallery_urls = galleryInput.split(',').map(s => s.trim()).filter(Boolean);
+            } else if (editSlug) {
+                payload.gallery_urls = [];
+            }
+
+            const salePrice = document.getElementById('prodSalePrice').value;
+            if (salePrice) {
+                payload.sale_price = parseFloat(salePrice);
+            } else {
+                payload.sale_price = null;
+            }
+
+            try {
+                if (editSlug) {
+                    await API.admin.updateProduct(editSlug, payload);
+                    showToast('Product updated successfully!', 'success');
+                } else {
+                    await API.admin.createProduct(payload);
+                    showToast('New product added to catalog!', 'success');
+                }
+                const modal = bootstrap.Modal.getInstance(document.getElementById('productFormModal'));
+                if (modal) modal.hide();
+                loadAdminProducts();
+                loadDashboardData();
+            } catch (err) {
+                showToast(err.message || 'Failed to save product.', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'Save Product';
+            }
+        }
+
+        async function handleDeleteProduct(slug, name) {
+            if (!confirm(`Are you sure you want to permanently delete product "${name}"?`)) return;
+            try {
+                await API.admin.deleteProduct(slug);
+                showToast(`Product "${name}" deleted.`, 'info');
+                loadAdminProducts();
+                loadDashboardData();
+            } catch (err) {
+                showToast(err.message || 'Failed to delete product.', 'error');
+            }
+        }
+
+        // ==========================================
+        // 4. CATEGORIES MANAGEMENT
+        // ==========================================
+        async function loadAdminCategories() {
+            const tbody = document.getElementById('adminCategoriesTableBody');
+            try {
+                const res = await API.admin.categories();
+                const categories = Array.isArray(res) ? res : (res.results || []);
+                cachedCategories = categories;
+
+                if (categories.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-muted">No categories found.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = categories.map(c => `
+                    <tr>
+                        <td><strong>${c.name}</strong></td>
+                        <td><code>${c.slug}</code></td>
+                        <td><span class="badge bg-light text-dark border">${c.product_count} items</span></td>
+                        <td>${c.is_featured ? '<span class="badge bg-purple">Featured</span>' : '<span class="text-muted">Standard</span>'}</td>
+                        <td class="text-end">
+                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="handleDeleteCategory('${c.slug}', '${c.name.replace(/'/g, "\\'")}')" title="Delete Category">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (e) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-danger">Failed to load categories.</td></tr>';
+            }
+        }
+
+        function openCategoryModal() {
+            document.getElementById('categoryForm').reset();
+            const modal = new bootstrap.Modal(document.getElementById('categoryFormModal'));
+            modal.show();
+        }
+
+        async function handleSaveCategory(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnSaveCategory');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Creating...';
+
+            const payload = {
+                name: document.getElementById('catName').value.trim(),
+                description: document.getElementById('catDesc').value.trim(),
+                is_featured: document.getElementById('catIsFeatured').checked
+            };
+            const customSlug = document.getElementById('catSlug').value.trim();
+            if (customSlug) payload.slug = customSlug;
+
+            try {
+                await API.admin.createCategory(payload);
+                showToast('Category created successfully!', 'success');
+                const modal = bootstrap.Modal.getInstance(document.getElementById('categoryFormModal'));
+                if (modal) modal.hide();
+                loadAdminCategories();
+                loadCategoryDropdown();
+            } catch (err) {
+                showToast(err.message || 'Failed to create category.', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'Create Category';
+            }
+        }
+
+        async function handleDeleteCategory(slug, name) {
+            if (!confirm(`Are you sure you want to delete category "${name}"?`)) return;
+            try {
+                await API.admin.deleteCategory(slug);
+                showToast(`Category "${name}" deleted.`, 'info');
+                loadAdminCategories();
+                loadCategoryDropdown();
+            } catch (e) {
+                showToast(e.message || 'Failed to delete category.', 'error');
+            }
+        }
+
+        // ==========================================
+        // 5. CUSTOMER MANAGEMENT
+        // ==========================================
+        async function loadAdminCustomers() {
+            const tbody = document.getElementById('adminCustomersTableBody');
+            try {
+                const res = await API.admin.customers();
+                const customers = res.results || res;
+
+                if (customers.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted">No customers registered yet.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = customers.map(u => `
+                    <tr>
+                        <td><strong>${u.first_name || ''} ${u.last_name || ''}</strong></td>
+                        <td>${u.email}</td>
+                        <td><code>@${u.username}</code></td>
+                        <td>${new Date(u.date_joined).toLocaleDateString()}</td>
+                        <td>
+                            <span class="badge ${u.is_staff ? 'bg-danger' : 'bg-purple-subtle text-purple'}">
+                                ${u.is_staff ? 'Staff Admin' : 'Customer'}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border">${u.total_orders || 0} orders</span>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (e) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-danger">Failed to load customers.</td></tr>';
+            }
+        }
+
+        // ==========================================
+        // 6. DISCOUNTS & COUPONS
+        // ==========================================
+        async function loadAdminCoupons() {
+            const tbody = document.getElementById('adminCouponsTableBody');
+            try {
+                const res = await API.admin.coupons();
+                const coupons = res.results || res;
+
+                if (coupons.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-muted">No discount coupons registered.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = coupons.map(c => `
+                    <tr>
+                        <td><span class="font-monospace fw-bold text-purple">${c.code}</span></td>
+                        <td>${c.discount_type === 'PERCENTAGE' ? 'Percentage' : 'Fixed'}</td>
+                        <td><strong>${c.discount_type === 'PERCENTAGE' ? `${c.discount_value}%` : `$${parseFloat(c.discount_value).toFixed(2)}`}</strong></td>
+                        <td>$${parseFloat(c.min_order_amount || 0).toFixed(2)}</td>
+                        <td>${c.times_used || 0} times</td>
+                        <td>
+                            <span class="badge ${c.is_active ? 'bg-success' : 'bg-secondary'}">
+                                ${c.is_active ? 'Active' : 'Inactive'}
+                            </span>
+                        </td>
+                        <td class="text-end">
+                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="handleDeleteCoupon(${c.id}, '${c.code}')" title="Delete Coupon">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (e) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-danger">Failed to load coupons.</td></tr>';
+            }
+        }
+
+        function openCouponModal() {
+            document.getElementById('couponForm').reset();
+            const modal = new bootstrap.Modal(document.getElementById('couponFormModal'));
+            modal.show();
+        }
+
+        async function handleSaveCoupon(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnSaveCoupon');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Creating...';
+
+            const payload = {
+                code: document.getElementById('coupCode').value.trim().toUpperCase(),
+                discount_type: document.getElementById('coupType').value,
+                discount_value: parseFloat(document.getElementById('coupValue').value),
+                min_order_amount: parseFloat(document.getElementById('coupMinAmount').value) || 0,
+                is_active: document.getElementById('coupIsActive').checked
+            };
+
+            try {
+                await API.admin.createCoupon(payload);
+                showToast(`Coupon ${payload.code} created!`, 'success');
+                const modal = bootstrap.Modal.getInstance(document.getElementById('couponFormModal'));
+                if (modal) modal.hide();
+                loadAdminCoupons();
+            } catch (err) {
+                showToast(err.message || 'Failed to create coupon.', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'Create Coupon';
+            }
+        }
+
+        async function handleDeleteCoupon(id, code) {
+            if (!confirm(`Are you sure you want to delete coupon ${code}?`)) return;
+            try {
+                await API.admin.deleteCoupon(id);
+                showToast(`Coupon ${code} removed.`, 'info');
+                loadAdminCoupons();
+            } catch (e) {
+                showToast(e.message || 'Failed to delete coupon.', 'error');
+            }
+        }
+    </script>
+</body>
+</html>

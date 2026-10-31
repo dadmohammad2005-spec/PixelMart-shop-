@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Checkout &mdash; PixelMart | MOBILE • LAPTOP • GADGETS</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../assets/css/style.css" rel="stylesheet">
+    <script>
+        (function(){
+            const saved = localStorage.getItem('pixelmart_theme') || localStorage.getItem('shall_shop_theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', saved);
+            document.documentElement.setAttribute('data-bs-theme', saved);
+        })();
+    </script>
+</head>
+<body class="bg-light">
+
+    <!-- Header Minimal for Checkout -->
+    <header class="navbar navbar-expand navbar-shall bg-white border-bottom">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="../index.html">
+                <img src="../assets/images/pixelmart-logo.png" alt="PixelMart Logo" style="height: 38px;">
+                <div class="d-flex flex-column">
+                    <span class="pixel-logo-text">Pixel<span class="mart-part">Mart</span></span>
+                    <span class="pixel-tagline">MOBILE &bull; LAPTOP &bull; GADGETS</span>
+                </div>
+            </a>
+            <div class="d-flex align-items-center gap-3 text-muted small">
+                <button type="button" class="header-action-btn theme-toggle-btn" title="Toggle Dark/Light Mode" aria-label="Toggle Theme">
+                    <i class="bi bi-moon-stars-fill theme-toggle-icon text-primary"></i>
+                </button>
+                <span><i class="bi bi-shield-lock-fill text-success me-1"></i> Verified Local Warranty</span>
+                <a href="cart.html" class="text-decoration-none">Back to Cart</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container py-5">
+        <!-- Stepper Indicator -->
+        <div class="checkout-steps max-w-700 mx-auto" id="checkoutStepper">
+            <div class="checkout-step-item active" id="stepIndicator1">
+                <div class="step-number">1</div>
+                <div class="step-label">Shipping Info</div>
+            </div>
+            <div class="checkout-step-item" id="stepIndicator2">
+                <div class="step-number">2</div>
+                <div class="step-label">Shipping Method</div>
+            </div>
+            <div class="checkout-step-item" id="stepIndicator3">
+                <div class="step-number">3</div>
+                <div class="step-label">Payment</div>
+            </div>
+            <div class="checkout-step-item" id="stepIndicator4">
+                <div class="step-number">4</div>
+                <div class="step-label">Review & Place</div>
+            </div>
+        </div>
+
+        <div class="row g-4 mt-2">
+            <!-- Checkout Form Container (Left Column) -->
+            <div class="col-lg-8" id="checkoutStepsContainer">
+
+                <!-- STEP 1: Customer & Shipping Information -->
+                <div class="card border-0 shadow-sm rounded-3 p-4 bg-white step-card" id="step1Card">
+                    <h5 class="fw-bold mb-3"><i class="bi bi-geo-alt text-primary me-2"></i>Step 1: Customer & Shipping Address</h5>
+                    
+                    <!-- Saved Addresses Quick Pick for Authenticated Users -->
+                    <div id="savedAddressSelector" class="mb-4 d-none">
+                        <label class="form-label small fw-semibold text-muted text-uppercase">Use a Saved Address</label>
+                        <select class="form-select form-select-sm" id="savedAddressesDropdown" onchange="populateSavedAddress(this.value)">
+                            <option value="">-- Choose from saved addresses --</option>
+                        </select>
+                    </div>
+
+                    <form id="shippingAddressForm" onsubmit="handleProceedToStep2(event)">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold">Full Name *</label>
+                                <input type="text" class="form-control" id="custName" required placeholder="John Doe">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold">Email Address *</label>
+                                <input type="email" class="form-control" id="custEmail" required placeholder="john@example.com">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold">Phone / WhatsApp Number *</label>
+                                <input type="tel" class="form-control" id="custPhone" required placeholder="0300-1234567 or 00816-23-736822">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold">Country *</label>
+                                <select class="form-select" id="custCountry" required>
+                                    <option value="Pakistan" selected>Pakistan</option>
+                                    <option value="United States">United States</option>
+                                    <option value="United Kingdom">United Kingdom</option>
+                                    <option value="Canada">Canada</option>
+                                    <option value="UAE">United Arab Emirates</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-semibold">Street / Area Address *</label>
+                                <input type="text" class="form-control" id="custAddress1" required placeholder="Jinnah Road, Near Science College or Main Market">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-semibold">Apartment, Shop, or Plaza (optional)</label>
+                                <input type="text" class="form-control" id="custAddress2" placeholder="Floor 2, Shop #14">
+                            </div>
+                            <div class="col-md-5">
+                                <label class="form-label small fw-semibold">City *</label>
+                                <input type="text" class="form-control" id="custCity" required value="Quetta" placeholder="Quetta">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-semibold">Province / State *</label>
+                                <input type="text" class="form-control" id="custState" required value="Balochistan" placeholder="Balochistan">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label small fw-semibold">Postal Code *</label>
+                                <input type="text" class="form-control" id="custPostal" required value="87300" placeholder="87300">
+                            </div>
+                            <div class="col-12" id="saveAddressCheckboxWrapper">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="saveAddressCheck">
+                                    <label class="form-check-label small" for="saveAddressCheck">
+                                        Save this address to my account for future orders
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end mt-4">
+                            <button type="submit" class="btn btn-primary px-4">
+                                Continue to Shipping Method &rarr;
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- STEP 2: Shipping Method -->
+                <div class="card border-0 shadow-sm rounded-3 p-4 bg-white step-card d-none" id="step2Card">
+                    <h5 class="fw-bold mb-3"><i class="bi bi-truck text-primary me-2"></i>Step 2: Choose Delivery Method</h5>
+                    
+                    <div class="d-flex flex-column gap-3 mb-4">
+                        <div class="form-check p-3 border rounded-3 d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-3">
+                                <input class="form-check-input ms-0 me-2" type="radio" name="shippingMethodRadio" id="shipStandard" value="standard" checked onchange="handleShippingMethodChange()">
+                                <label class="form-check-label" for="shipStandard">
+                                    <span class="d-block fw-bold">Quetta Doorstep Handover &bull; Express Dispatch</span>
+                                    <span class="small text-muted">Direct delivery within Quetta (Same-day or next morning)</span>
+                                </label>
+                            </div>
+                            <strong class="text-success" id="shipStandardPrice">FREE in Quetta</strong>
+                        </div>
+
+                        <div class="form-check p-3 border rounded-3 d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-3">
+                                <input class="form-check-input ms-0 me-2" type="radio" name="shippingMethodRadio" id="shipExpress" value="express" onchange="handleShippingMethodChange()">
+                                <label class="form-check-label" for="shipExpress">
+                                    <span class="d-block fw-bold">Balochistan Regional Courier (Insured Box)</span>
+                                    <span class="small text-muted">Safe bubble-wrapped courier across Balochistan (1–2 days)</span>
+                                </label>
+                            </div>
+                            <strong>PKR 1,500</strong>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <button type="button" class="btn btn-light" onclick="goToStep(1)">&larr; Back</button>
+                        <button type="button" class="btn btn-primary px-4" onclick="goToStep(3)">Continue to Payment &rarr;</button>
+                    </div>
+                </div>
+
+                <!-- STEP 3: Payment Method -->
+                <div class="card border-0 shadow-sm rounded-3 p-4 bg-white step-card d-none" id="step3Card">
+                    <h5 class="fw-bold mb-3"><i class="bi bi-credit-card text-primary me-2"></i>Step 3: Payment Method</h5>
+
+                    <div class="d-flex flex-column gap-3 mb-4">
+                        <!-- Cash on Delivery -->
+                        <div class="form-check p-3 border rounded-3 bg-light">
+                            <input class="form-check-input me-2" type="radio" name="paymentMethodRadio" id="payCOD" value="COD" checked onchange="togglePaymentBox()">
+                            <label class="form-check-label fw-bold d-block" for="payCOD">
+                                Cash on Delivery (COD) / Direct Showroom Handover
+                            </label>
+                            <p class="small text-muted mb-0 mt-1">Recommended in Quetta. Inspect your laptop or smartphone and verify specs before paying cash to our agent.</p>
+                        </div>
+
+                        <!-- Card Payment -->
+                        <div class="form-check p-3 border rounded-3">
+                            <input class="form-check-input me-2" type="radio" name="paymentMethodRadio" id="payStripe" value="STRIPE" onchange="togglePaymentBox()">
+                            <label class="form-check-label fw-bold d-block" for="payStripe">
+                                Bank Transfer / Card (Online or POS Terminal)
+                            </label>
+                            <p class="small text-muted mb-2 mt-1">Direct bank transfer via Habib Bank / Meezan or card swipe on delivery.</p>
+                            
+                            <div id="stripeCardSimulator" class="p-3 bg-light rounded-2 border mt-2 d-none">
+                                <div class="mb-2">
+                                    <label class="small text-muted fw-semibold">Card Information (Stripe Sandbox)</label>
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text"><i class="bi bi-credit-card"></i></span>
+                                        <input type="text" class="form-control font-monospace" id="mockCardNumber" placeholder="4242 •••• •••• 4242" value="4242 4242 4242 4242">
+                                    </div>
+                                </div>
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <input type="text" class="form-control form-control-sm" id="mockCardExpiry" placeholder="MM / YY" value="12/28">
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="text" class="form-control form-control-sm" id="mockCardCvc" placeholder="CVC" value="123">
+                                    </div>
+                                </div>
+                                <span class="small text-success mt-2 d-block"><i class="bi bi-shield-check"></i> Test card auto-populated for portfolio verification.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <button type="button" class="btn btn-light" onclick="goToStep(2)">&larr; Back</button>
+                        <button type="button" class="btn btn-primary px-4" onclick="goToStep(4)">Review Order &rarr;</button>
+                    </div>
+                </div>
+
+                <!-- STEP 4: Order Review & Placement -->
+                <div class="card border-0 shadow-sm rounded-3 p-4 bg-white step-card d-none" id="step4Card">
+                    <h5 class="fw-bold mb-3"><i class="bi bi-card-checklist text-primary me-2"></i>Step 4: Final Order Review</h5>
+
+                    <!-- Shipping Address Snapshot -->
+                    <div class="p-3 bg-light rounded-3 mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="fw-bold small text-uppercase text-muted">Shipping Destination</span>
+                            <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none" onclick="goToStep(1)">Edit</button>
+                        </div>
+                        <div id="reviewAddressSnapshot" class="small">
+                            <!-- Injected -->
+                        </div>
+                    </div>
+
+                    <!-- Payment Method Snapshot -->
+                    <div class="p-3 bg-light rounded-3 mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="fw-bold small text-uppercase text-muted">Selected Payment Method</span>
+                            <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none" onclick="goToStep(3)">Edit</button>
+                        </div>
+                        <div id="reviewPaymentSnapshot" class="small fw-semibold">
+                            <!-- Injected -->
+                        </div>
+                    </div>
+
+                    <!-- Order Notes -->
+                    <div class="mb-4">
+                        <label class="form-label small fw-semibold">Order Notes or Special Instructions (Optional)</label>
+                        <textarea class="form-control form-control-sm" id="orderNotesInput" rows="2" placeholder="Delivery gate code, apartment access note, etc."></textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <button type="button" class="btn btn-light" onclick="goToStep(3)">&larr; Back</button>
+                        <button type="button" class="btn btn-success btn-lg px-4" id="btnPlaceOrder" onclick="submitFinalOrder()">
+                            <i class="bi bi-lock-fill me-2"></i> Complete Order
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 5: Order Confirmation Page with Printable Bill -->
+                <div class="card border-0 shadow-sm rounded-3 p-4 p-md-5 bg-white step-card d-none text-center" id="step5Card">
+                    <div class="mb-3">
+                        <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+                    </div>
+                    <h2 class="fw-bold text-dark mb-2">Order Confirmed!</h2>
+                    <p class="text-muted mb-4 lead fs-6">
+                        Thank you for your purchase. We have received your order and started preparing it for shipment.
+                    </p>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex flex-wrap justify-content-center gap-3 mb-4">
+                        <button type="button" class="btn btn-dark btn-lg px-4" onclick="printOrderBill()">
+                            <i class="bi bi-printer-fill me-2"></i> Print Bill / Invoice
+                        </button>
+                        <a href="orders.html" class="btn btn-outline-primary btn-lg" id="btnViewOrderDetails">
+                            <i class="bi bi-box-seam me-1"></i> Track Order in Account
+                        </a>
+                        <a href="shop.html" class="btn btn-primary btn-lg">
+                            Continue Shopping &rarr;
+                        </a>
+                    </div>
+
+                    <!-- Printable Invoice Bill -->
+                    <div id="printableInvoice" class="invoice-bill-container">
+                        <!-- Invoice Header -->
+                        <div class="invoice-header d-flex justify-content-between align-items-start border-bottom pb-3 mb-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="../assets/images/pixelmart-logo.png" alt="PixelMart Logo" style="height: 48px;">
+                                <div>
+                                    <div class="invoice-brand mb-0">
+                                        <span class="pixel-logo-text fs-4">Pixel<span class="mart-part text-coral">Mart</span></span>
+                                    </div>
+                                    <div class="small text-muted fw-bold">MOBILE &bull; LAPTOP &bull; GADGETS</div>
+                                    <div class="small text-muted">Showroom: Quetta, Balochistan, Pakistan &bull; Phone: <strong>00816-23-736822</strong></div>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <h3 class="fw-bold mb-1 text-dark">OFFICIAL BILL</h3>
+                                <div class="fw-bold font-monospace text-primary" id="billOrderNumber">ORD-0000</div>
+                                <div class="small text-muted" id="billOrderDate">Date: Oct 31, 2026</div>
+                                <div class="mt-1">
+                                    <span class="invoice-badge-status" id="billPaymentBadge">VERIFIED ORDER</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Customer & Shipping Details -->
+                        <div class="row g-4 mb-4">
+                            <div class="col-sm-6 text-start">
+                                <h6 class="fw-bold text-uppercase small text-muted mb-2">Customer & Billed To:</h6>
+                                <p class="mb-1 fw-bold text-dark" id="billCustomerName">Customer Name</p>
+                                <p class="mb-1 text-muted small" id="billCustomerEmail">customer@example.com</p>
+                                <p class="mb-0 text-muted small" id="billCustomerPhone">+92 300 0000000</p>
+                            </div>
+                            <div class="col-sm-6 text-start text-sm-end">
+                                <h6 class="fw-bold text-uppercase small text-muted mb-2">Delivery Destination:</h6>
+                                <p class="mb-1 fw-bold text-dark" id="billShippingName">Recipient Name</p>
+                                <p class="mb-1 text-muted small" id="billShippingAddress">Main Jinnah Road</p>
+                                <p class="mb-1 text-muted small" id="billShippingCityState">Quetta, Balochistan, Pakistan</p>
+                                <p class="mb-0 text-muted small"><strong>Delivery Type:</strong> <span id="billShippingMethod">Quetta Handover</span></p>
+                            </div>
+                        </div>
+
+                        <!-- Order Line Items Table -->
+                        <div class="table-responsive">
+                            <table class="invoice-items-table w-100">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Hardware Description</th>
+                                        <th>SKU</th>
+                                        <th class="text-center">Qty</th>
+                                        <th class="text-end">Unit Price (PKR)</th>
+                                        <th class="text-end">Total (PKR)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="billItemsTableBody">
+                                    <!-- Injected dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Financial Summary in PKR -->
+                        <div class="d-flex justify-content-end mb-4">
+                            <table class="invoice-totals-table">
+                                <tr>
+                                    <td class="text-muted pe-3">Subtotal:</td>
+                                    <td class="text-end fw-semibold" id="billSubtotal">PKR 0</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted pe-3">Delivery Fee:</td>
+                                    <td class="text-end fw-semibold" id="billShipping">FREE in Quetta</td>
+                                </tr>
+                                <tr id="billDiscountRow" class="d-none">
+                                    <td class="text-success pe-3">Voucher Discount:</td>
+                                    <td class="text-end text-success fw-semibold" id="billDiscount">-PKR 0</td>
+                                </tr>
+                                <tr class="invoice-grand-total">
+                                    <td class="pe-3"><strong>Total Amount:</strong></td>
+                                    <td class="text-end"><strong id="billTotalAmount">PKR 0</strong></td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <!-- Footer Notice & Barcode -->
+                        <div class="invoice-footer-note border-top pt-3 text-center">
+                            <p class="mb-1 fw-bold text-dark">Thank you for purchasing from PixelMart &mdash; Quetta, Balochistan!</p>
+                            <p class="mb-2 text-muted small">1-Year Official Hardware Testing & Replacement Warranty Included. Please preserve this invoice for all warranty claims and showroom verifications.</p>
+                            <div class="barcode-strip font-monospace fw-bold" id="billBarcode">*ORD-0000*</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Order Items & Breakdown Snapshot -->
+            <div class="col-lg-4" id="checkoutSummaryColumn">
+                <div class="summary-card sticky-top bg-white p-4 rounded-3 border shadow-sm" style="top: 90px;">
+                    <h5 class="fw-bold mb-3">Order Details (<span id="checkoutSummaryItemsCount">0</span>)</h5>
+                    <div id="checkoutItemsList" class="d-flex flex-column gap-2 mb-3 max-h-300 overflow-auto border-bottom pb-3">
+                        <!-- Items snapshot -->
+                    </div>
+
+                    <div class="summary-row d-flex justify-content-between py-2 border-bottom">
+                        <span>Subtotal</span>
+                        <strong id="checkoutSubtotalDisplay">PKR 0</strong>
+                    </div>
+
+                    <div class="summary-row text-success d-none justify-content-between py-2 border-bottom" id="checkoutDiscountRow">
+                        <span>Coupon Savings</span>
+                        <strong id="checkoutDiscountDisplay">-PKR 0</strong>
+                    </div>
+
+                    <div class="summary-row d-flex justify-content-between py-2 border-bottom">
+                        <span>Delivery</span>
+                        <span id="checkoutShippingDisplay">FREE in Quetta</span>
+                    </div>
+
+                    <div class="summary-row summary-total d-flex justify-content-between py-3 fs-5 fw-bold">
+                        <span>Total Due</span>
+                        <span class="text-primary" id="checkoutGrandTotalDisplay">PKR 0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/main.js"></script>
+
+    <!-- Multi-Step Checkout Script -->
+    <script>
+        let cartData = null;
+        let savedAddresses = [];
+        let currentStep = 1;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await initCheckout();
+        });
+
+        async function initCheckout() {
+            try {
+                cartData = await API.cart.get('standard');
+                if (cartData.is_empty || cartData.items.length === 0) {
+                    showToast('Your cart is empty. Please add items before checking out.', 'info');
+                    window.location.href = 'cart.html';
+                    return;
+                }
+                renderCheckoutSummary();
+
+                // If authenticated, prefill profile and addresses
+                const status = await API.auth.status();
+                if (status.is_authenticated && status.user) {
+                    document.getElementById('custEmail').value = status.user.email || '';
+                    document.getElementById('custName').value = `${status.user.first_name || ''} ${status.user.last_name || ''}`.trim();
+                    document.getElementById('custPhone').value = status.user.phone_number || '';
+                    loadSavedAddresses();
+                } else {
+                    document.getElementById('saveAddressCheckboxWrapper').classList.add('d-none');
+                }
+            } catch (e) {
+                showToast(e.message || 'Error initializing checkout.', 'error');
+            }
+        }
+
+        async function loadSavedAddresses() {
+            try {
+                const res = await API.auth.getAddresses();
+                const addresses = res.results || res;
+                if (addresses.length > 0) {
+                    savedAddresses = addresses;
+                    const select = document.getElementById('savedAddressesDropdown');
+                    select.innerHTML = '<option value="">-- Choose from saved addresses --</option>' +
+                        addresses.map((a, i) => `<option value="${i}">${a.full_name} - ${a.address_line1}, ${a.city}</option>`).join('');
+                    document.getElementById('savedAddressSelector').classList.remove('d-none');
+
+                    // If default shipping exists, autopopulate
+                    const defaultAddr = addresses.find(a => a.is_default_shipping) || addresses[0];
+                    if (defaultAddr) {
+                        populateAddressFields(defaultAddr);
+                    }
+                }
+            } catch (e) {
+                // Ignore address load error
+            }
+        }
+
+        function populateSavedAddress(index) {
+            if (index === '') return;
+            const a = savedAddresses[parseInt(index)];
+            if (a) populateAddressFields(a);
+        }
+
+        function populateAddressFields(a) {
+            document.getElementById('custName').value = a.full_name || '';
+            document.getElementById('custPhone').value = a.phone_number || '';
+            document.getElementById('custAddress1').value = a.address_line1 || '';
+            document.getElementById('custAddress2').value = a.address_line2 || '';
+            document.getElementById('custCity').value = a.city || '';
+            document.getElementById('custState').value = a.state || '';
+            document.getElementById('custPostal').value = a.postal_code || '';
+            document.getElementById('custCountry').value = a.country || 'United States';
+        }
+
+        function renderCheckoutSummary() {
+            const totals = cartData.totals;
+            document.getElementById('checkoutSummaryItemsCount').textContent = cartData.total_items;
+            document.getElementById('checkoutSubtotalDisplay').textContent = formatPKR(totals.subtotal);
+            document.getElementById('checkoutShippingDisplay').textContent = parseFloat(totals.shipping_cost) === 0 ? 'FREE in Quetta' : formatPKR(totals.shipping_cost);
+            document.getElementById('checkoutGrandTotalDisplay').textContent = formatPKR(totals.grand_total);
+
+            if (parseFloat(totals.discount_amount) > 0) {
+                document.getElementById('checkoutDiscountRow').classList.remove('d-none');
+                document.getElementById('checkoutDiscountDisplay').textContent = `-${formatPKR(totals.discount_amount)}`;
+            }
+
+            // Standard shipping price in step 2
+            document.getElementById('shipStandardPrice').textContent = 'FREE in Quetta';
+
+            // Render compact items list
+            const container = document.getElementById('checkoutItemsList');
+            container.innerHTML = cartData.items.map(item => `
+                <div class="d-flex align-items-center justify-content-between small py-1">
+                    <div class="d-flex align-items-center gap-2 text-truncate" style="max-width: 70%;">
+                        <img src="${item.product.main_image || '../assets/images/placeholder.jpg'}" alt="" style="width: 36px; height: 36px; object-fit: cover;" class="rounded" onerror="this.src='https://placehold.co/72x72/f8fafc/0f172a?text=PixelMart'">
+                        <span class="text-truncate">${item.quantity} × ${item.product.name}</span>
+                    </div>
+                    <strong>${formatPKR(item.line_total)}</strong>
+                </div>
+            `).join('');
+        }
+
+        function handleProceedToStep2(e) {
+            e.preventDefault();
+            goToStep(2);
+        }
+
+        async function handleShippingMethodChange() {
+            const selectedRule = document.querySelector('input[name="shippingMethodRadio"]:checked')?.value || 'standard';
+            cartData = await API.cart.get(selectedRule);
+            renderCheckoutSummary();
+        }
+
+        function togglePaymentBox() {
+            const method = document.querySelector('input[name="paymentMethodRadio"]:checked')?.value;
+            const stripeBox = document.getElementById('stripeCardSimulator');
+            if (method === 'STRIPE') {
+                stripeBox.classList.remove('d-none');
+            } else {
+                stripeBox.classList.add('d-none');
+            }
+        }
+
+        function goToStep(step) {
+            currentStep = step;
+            // Hide all cards
+            document.querySelectorAll('.step-card').forEach(c => c.classList.add('d-none'));
+            // Remove active from indicators
+            for (let i = 1; i <= 4; i++) {
+                const ind = document.getElementById(`stepIndicator${i}`);
+                if (ind) {
+                    ind.classList.remove('active');
+                    if (i < step) ind.classList.add('completed');
+                    else ind.classList.remove('completed');
+                }
+            }
+
+            const activeInd = document.getElementById(`stepIndicator${step}`);
+            if (activeInd) activeInd.classList.add('active');
+
+            const currentCard = document.getElementById(`step${step}Card`);
+            if (currentCard) currentCard.classList.remove('d-none');
+
+            // Populate Step 4 review snapshots if going to step 4
+            if (step === 4) {
+                const addr = `
+                    <div><strong>${document.getElementById('custName').value}</strong></div>
+                    <div>${document.getElementById('custAddress1').value} ${document.getElementById('custAddress2').value}</div>
+                    <div>${document.getElementById('custCity').value}, ${document.getElementById('custState').value} ${document.getElementById('custPostal').value}</div>
+                    <div>${document.getElementById('custCountry').value} • ${document.getElementById('custPhone').value}</div>
+                `;
+                document.getElementById('reviewAddressSnapshot').innerHTML = addr;
+
+                const payMethod = document.querySelector('input[name="paymentMethodRadio"]:checked')?.value;
+                document.getElementById('reviewPaymentSnapshot').textContent = payMethod === 'COD'
+                    ? 'Cash on Delivery (Pay upon arrival)'
+                    : 'Credit / Debit Card (Stripe Sandbox Verified)';
+            }
+
+            window.scrollTo({ top: 100, behavior: 'smooth' });
+        }
+
+        async function submitFinalOrder() {
+            const btn = document.getElementById('btnPlaceOrder');
+            const originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Processing order...';
+
+            const payload = {
+                customer_name: document.getElementById('custName').value.trim(),
+                customer_email: document.getElementById('custEmail').value.trim(),
+                customer_phone: document.getElementById('custPhone').value.trim(),
+                shipping_name: document.getElementById('custName').value.trim(),
+                shipping_phone: document.getElementById('custPhone').value.trim(),
+                shipping_address_line1: document.getElementById('custAddress1').value.trim(),
+                shipping_address_line2: document.getElementById('custAddress2').value.trim(),
+                shipping_city: document.getElementById('custCity').value.trim(),
+                shipping_state: document.getElementById('custState').value.trim(),
+                shipping_postal_code: document.getElementById('custPostal').value.trim(),
+                shipping_country: document.getElementById('custCountry').value,
+                shipping_method: document.querySelector('input[name="shippingMethodRadio"]:checked')?.value || 'standard',
+                payment_method: document.querySelector('input[name="paymentMethodRadio"]:checked')?.value || 'COD',
+                order_notes: document.getElementById('orderNotesInput').value.trim(),
+                save_address: document.getElementById('saveAddressCheck')?.checked || false
+            };
+
+            try {
+                // 1. Submit order creation to backend
+                const res = await API.orders.checkout(payload);
+                const order = res.order;
+
+                // 2. If Stripe test payment, verify payment on server
+                if (payload.payment_method === 'STRIPE') {
+                    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Verifying Stripe payment...';
+                    await API.payments.verify(order.order_number, res.client_secret || 'pi_simulated');
+                }
+
+                // 3. Display Confirmation Step 5 & Populate Printable Bill
+                document.querySelectorAll('.step-card').forEach(c => c.classList.add('d-none'));
+                document.getElementById('checkoutStepper').classList.add('d-none');
+                document.getElementById('checkoutSummaryColumn').classList.add('d-none');
+                document.getElementById('step5Card').classList.remove('d-none');
+
+                document.getElementById('btnViewOrderDetails').href = `orders.html?order=${order.order_number}`;
+
+                populatePrintableBill(order, payload);
+                updateCartBadge(0);
+                showToast('Congratulations! Order placed. Preparing bill...', 'success');
+
+                // Automatically trigger the print dialog after a brief render delay
+                setTimeout(() => {
+                    printOrderBill();
+                }, 750);
+            } catch (err) {
+                showToast(err.message || 'Checkout failed. Please check your information.', 'error');
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        }
+
+        function printOrderBill() {
+            window.print();
+        }
+        window.printOrderBill = printOrderBill;
+
+        function populatePrintableBill(order, payload) {
+            if (!order) return;
+            document.getElementById('billOrderNumber').textContent = order.order_number || 'ORD-0000';
+            const orderDate = order.created_at ? new Date(order.created_at).toLocaleString('en-US', {
+                year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+            }) : new Date().toLocaleString();
+            document.getElementById('billOrderDate').textContent = `Date: ${orderDate}`;
+
+            const isPaid = payload.payment_method === 'STRIPE' || order.payment_status === 'COMPLETED' || order.payment_status === 'PAID';
+            const badge = document.getElementById('billPaymentBadge');
+            if (badge) {
+                badge.textContent = isPaid ? 'PAID & VERIFIED' : 'CASH ON DELIVERY (PENDING)';
+                badge.className = isPaid ? 'invoice-badge-status' : 'invoice-badge-status pending';
+            }
+
+            // Customer
+            document.getElementById('billCustomerName').textContent = payload.customer_name || order.customer_name || 'Customer';
+            document.getElementById('billCustomerEmail').textContent = payload.customer_email || order.customer_email || '';
+            document.getElementById('billCustomerPhone').textContent = payload.customer_phone || order.customer_phone || '';
+
+            // Shipping
+            document.getElementById('billShippingName').textContent = payload.shipping_name || payload.customer_name || 'Recipient';
+            const addr1 = payload.shipping_address_line1 || order.shipping_address_line1 || '';
+            const addr2 = payload.shipping_address_line2 || order.shipping_address_line2 || '';
+            document.getElementById('billShippingAddress').textContent = addr2 ? `${addr1}, ${addr2}` : addr1;
+            const city = payload.shipping_city || order.shipping_city || '';
+            const state = payload.shipping_state || order.shipping_state || '';
+            const zip = payload.shipping_postal_code || order.shipping_postal_code || '';
+            const country = payload.shipping_country || order.shipping_country || 'United States';
+            document.getElementById('billShippingCityState').textContent = `${city}${city && state ? ', ' : ''}${state} ${zip}, ${country}`;
+
+            document.getElementById('billShippingMethod').textContent = (payload.shipping_method === 'express')
+                ? 'Express Courier (1-2 Business Days)'
+                : 'Standard Delivery (3-5 Business Days)';
+
+            // Items
+            const tbody = document.getElementById('billItemsTableBody');
+            tbody.innerHTML = '';
+
+            const items = (order.items && order.items.length > 0) ? order.items : (cartData?.items || []);
+            if (items.length > 0) {
+                items.forEach((item, idx) => {
+                    const price = parseFloat(item.price || item.unit_price || 0);
+                    const qty = item.quantity || 1;
+                    const lineTotal = parseFloat(item.line_total || (price * qty));
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${idx + 1}</td>
+                            <td>
+                                <strong>${item.product_name || item.name || 'Hardware Device'}</strong>
+                            </td>
+                            <td><span class="font-monospace text-muted small">${item.product_sku || item.sku || 'SKU-001'}</span></td>
+                            <td class="text-center">${qty}</td>
+                            <td class="text-end">${formatPKR(price)}</td>
+                            <td class="text-end fw-semibold">${formatPKR(lineTotal)}</td>
+                        </tr>
+                    `;
+                });
+            } else {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Order items processed.</td></tr>';
+            }
+
+            // Totals
+            const subtotal = parseFloat(order.subtotal || cartData?.subtotal || 0);
+            const shipping = parseFloat(order.shipping_cost || 0);
+            const discount = parseFloat(order.discount_amount || cartData?.discount || 0);
+            const total = parseFloat(order.total_amount || 0);
+
+            document.getElementById('billSubtotal').textContent = formatPKR(subtotal);
+            document.getElementById('billShipping').textContent = shipping > 0 ? formatPKR(shipping) : 'FREE in Quetta';
+
+            const discountRow = document.getElementById('billDiscountRow');
+            if (discount > 0) {
+                discountRow.classList.remove('d-none');
+                document.getElementById('billDiscount').textContent = `-${formatPKR(discount)} (${order.coupon_code || 'Voucher Applied'})`;
+            } else {
+                discountRow.classList.add('d-none');
+            }
+
+            document.getElementById('billTotalAmount').textContent = formatPKR(total);
+            document.getElementById('billBarcode').textContent = `*${order.order_number || 'ORD-0000'}*`;
+        }
+    </script>
+</body>
+</html>

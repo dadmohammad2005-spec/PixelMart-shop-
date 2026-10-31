@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details &mdash; Shall Shop | Discover More. Shop Better.</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../assets/css/style.css" rel="stylesheet">
+    <script>
+        (function(){
+            const saved = localStorage.getItem('pixelmart_theme') || localStorage.getItem('shall_shop_theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', saved);
+            document.documentElement.setAttribute('data-bs-theme', saved);
+        })();
+    </script>
+</head>
+<body>
+
+    <!-- Announcement Bar -->
+    <div class="announcement-bar text-center">
+        <div class="container d-flex align-items-center justify-content-center" id="announcementBarContent">
+            <span>✨ Free Express Worldwide Shipping on orders over $100 with voucher code <strong>SHALL10</strong></span>
+        </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="navbar navbar-expand-lg navbar-shall">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="../index.html">
+                <img src="../assets/images/pixelmart-logo.png" alt="PixelMart Logo" class="pixel-logo-img">
+                <div class="d-flex flex-column">
+                    <span class="pixel-logo-text">Pixel<span class="mart-part">Mart</span></span>
+                    <span class="pixel-tagline">MOBILE &bull; LAPTOP &bull; GADGETS</span>
+                </div>
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <i class="bi bi-list fs-2 text-dark"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="shop.html">Shop</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../index.html#newArrivalsSection">New Arrivals</a></li>
+                    <li class="nav-item"><a class="nav-link" href="shop.html?sort=bestseller">Best Sellers</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                </ul>
+
+                <form class="header-search-form me-lg-3 my-2 my-lg-0" role="search">
+                    <i class="bi bi-search header-search-icon"></i>
+                    <input class="form-control header-search-input" type="search" placeholder="Search products..." aria-label="Search">
+                </form>
+
+                <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0">
+                    <button type="button" class="header-action-btn theme-toggle-btn" title="Toggle Dark/Light Mode" aria-label="Toggle Theme">
+                        <i class="bi bi-moon-stars-fill theme-toggle-icon text-purple"></i>
+                    </button>
+                    <a href="wishlist.html" class="header-action-btn" title="Wishlist">
+                        <i class="bi bi-heart fs-5"></i>
+                        <span class="badge-counter wishlist-badge d-none">0</span>
+                    </a>
+                    <a href="cart.html" class="header-action-btn" title="Cart">
+                        <i class="bi bi-bag fs-5"></i>
+                        <span class="badge-counter cart-badge d-none">0</span>
+                    </a>
+                    <div id="headerAuthLinks" class="d-flex align-items-center gap-2 ms-2">
+                        <a href="login.html" class="btn btn-sm btn-outline-primary">Sign In</a>
+                        <a href="register.html" class="btn btn-sm btn-primary">Register</a>
+                    </div>
+                    <div id="headerUserDropdown" class="dropdown d-none ms-2">
+                        <button class="btn btn-sm btn-light dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle fs-5 text-primary"></i>
+                            <span id="headerUserName" class="fw-semibold">Account</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm">
+                            <li><a class="dropdown-item" href="account.html"><i class="bi bi-person me-2"></i>My Profile</a></li>
+                            <li><a class="dropdown-item" href="orders.html"><i class="bi bi-box-seam me-2"></i>My Orders</a></li>
+                            <li><a class="dropdown-item" href="wishlist.html"><i class="bi bi-heart me-2"></i>Wishlist</a></li>
+                            <li><a class="dropdown-item text-primary fw-semibold d-none" id="headerAdminLink" href="admin.html"><i class="bi bi-speedometer2 me-2"></i>Admin Dashboard</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item text-danger" onclick="handleLogout()"><i class="bi bi-box-arrow-right me-2"></i>Sign Out</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div class="bg-white border-bottom py-3 mb-4">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0 small">
+                    <li class="breadcrumb-item"><a href="../index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="shop.html">Shop</a></li>
+                    <li class="breadcrumb-item"><span id="breadcrumbCategory" class="text-muted">Category</span></li>
+                    <li class="breadcrumb-item active" id="breadcrumbProductName" aria-current="page">Loading...</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Product Detail Container -->
+    <main class="container pb-5">
+        <div id="productDetailLoading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="text-muted mt-2">Loading product details...</p>
+        </div>
+
+        <div id="productDetailContent" class="d-none">
+            <div class="row g-5">
+                <!-- Gallery Column -->
+                <div class="col-lg-6">
+                    <div class="product-gallery-main mb-3">
+                        <img id="mainGalleryImage" src="" alt="Product image" onerror="this.src='https://placehold.co/800x800/f8fafc/0f172a?text=Shall+Shop'">
+                    </div>
+                    <div class="gallery-thumbs" id="galleryThumbnails">
+                        <!-- Thumbnails injected dynamically -->
+                    </div>
+                </div>
+
+                <!-- Product Information Column -->
+                <div class="col-lg-6">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-primary text-uppercase fw-bold" id="productBrandBadge">Brand</span>
+                            <span class="badge bg-light text-dark border text-uppercase" id="productCategoryBadge">Category</span>
+                        </div>
+                        <button type="button" id="btnWishlistToggle" class="btn btn-sm btn-outline-secondary rounded-pill" onclick="toggleProductWishlist()">
+                            <i class="bi bi-heart me-1"></i> Wishlist
+                        </button>
+                    </div>
+
+                    <h1 class="h2 fw-bold text-dark mb-2" id="productTitle">Product Title</h1>
+
+                    <!-- Key Hardware Specs Row -->
+                    <div class="p-2 px-3 bg-light rounded-3 border mb-3 small text-muted" id="productSpecsRow">
+                        <i class="bi bi-cpu text-primary me-2"></i><span id="productSpecsText">Hardware specifications</span>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <div class="d-flex text-warning fs-6" id="ratingStars">
+                            <!-- Star icons -->
+                        </div>
+                        <span class="text-muted small" id="ratingSummary">(0 reviews)</span>
+                        <span class="text-muted small">•</span>
+                        <span class="text-muted small">SKU: <strong id="productSku">SKU-000</strong></span>
+                    </div>
+
+                    <div class="product-price-row mb-4">
+                        <span class="display-6 fw-bold text-dark" id="currentPriceDisplay">PKR 0</span>
+                        <span class="text-decoration-line-through text-muted fs-5 d-none ms-2" id="originalPriceDisplay">PKR 0</span>
+                        <span class="badge bg-danger ms-2 d-none" id="discountBadge">-0%</span>
+                    </div>
+
+                    <p class="text-dark-muted mb-4 lead fs-6" id="productShortDesc">
+                        Short overview description...
+                    </p>
+
+                    <!-- Stock Availability Box -->
+                    <div class="p-3 bg-light rounded-3 border mb-4">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="fw-semibold small">Quetta Showroom Stock:</span>
+                            <span id="stockStatusBadge" class="badge bg-success">In Stock</span>
+                        </div>
+                        <div class="small text-muted mt-1" id="stockCountNote">
+                            Items available for immediate dispatch or direct pickup.
+                        </div>
+                    </div>
+
+                    <!-- Quantity & Add to Cart -->
+                    <div class="row g-3 align-items-center mb-4">
+                        <div class="col-auto">
+                            <div class="quantity-control d-flex align-items-center border rounded">
+                                <button type="button" class="btn btn-sm btn-light" onclick="adjustDetailQty(-1)" aria-label="Decrease quantity">-</button>
+                                <input type="number" id="detailQuantityInput" class="form-control form-control-sm text-center border-0" style="width: 48px;" value="1" min="1" max="100">
+                                <button type="button" class="btn btn-sm btn-light" onclick="adjustDetailQty(1)" aria-label="Increase quantity">+</button>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <button type="button" id="btnAddToCartDetail" class="btn btn-primary btn-lg w-100" onclick="handleAddToCartFromDetail()">
+                                <i class="bi bi-cart-plus me-2"></i> Add to Cart &bull; PKR
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Assurances -->
+                    <div class="row g-3 pt-3 border-top text-muted small">
+                        <div class="col-6 d-flex align-items-center gap-2">
+                            <i class="bi bi-geo-alt fs-5 text-primary"></i>
+                            <span>Quetta Showroom Tested</span>
+                        </div>
+                        <div class="col-6 d-flex align-items-center gap-2">
+                            <i class="bi bi-shield-check fs-5 text-success"></i>
+                            <span>1-Year Local Warranty</span>
+                        </div>
+                        <div class="col-6 d-flex align-items-center gap-2">
+                            <i class="bi bi-telephone fs-5 text-primary"></i>
+                            <span>Support: 00816-23-736822</span>
+                        </div>
+                        <div class="col-6 d-flex align-items-center gap-2">
+                            <i class="bi bi-receipt fs-5 text-primary"></i>
+                            <span>Instant Printed Bill Receipt</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Full Product Description & Specifications -->
+            <div class="mt-5 pt-4 border-top">
+                <ul class="nav nav-tabs" id="productTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active fw-semibold" id="desc-tab" data-bs-toggle="tab" data-bs-target="#desc-tab-pane" type="button" role="tab">Detailed Overview</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-semibold" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews-tab-pane" type="button" role="tab">Customer Reviews</button>
+                    </li>
+                </ul>
+
+                <div class="tab-content bg-white p-4 rounded-bottom border border-top-0 mb-5" id="productTabContent">
+                    <!-- Description Tab -->
+                    <div class="tab-pane fade show active" id="desc-tab-pane" role="tabpanel">
+                        <div class="prose max-w-800" id="productFullDescription">
+                            <!-- Injected -->
+                        </div>
+                    </div>
+
+                    <!-- Reviews Tab -->
+                    <div class="tab-pane fade" id="reviews-tab-pane" role="tabpanel">
+                        <div class="row g-4">
+                            <!-- Reviews List -->
+                            <div class="col-lg-7">
+                                <h5 class="fw-bold mb-3">Customer Feedback</h5>
+                                <div id="productReviewsList" class="d-flex flex-column gap-3">
+                                    <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                                </div>
+                            </div>
+
+                            <!-- Write a Review Form -->
+                            <div class="col-lg-5">
+                                <div class="card border-0 bg-light p-4 rounded-3">
+                                    <h5 class="fw-bold mb-2">Write a Review</h5>
+                                    <p class="text-muted small mb-3">Share your experience with verified customers.</p>
+                                    
+                                    <form id="writeReviewForm" onsubmit="handleReviewSubmit(event)">
+                                        <div class="mb-3">
+                                            <label class="form-label small fw-semibold">Rating</label>
+                                            <select class="form-select form-select-sm" id="reviewRatingInput" required>
+                                                <option value="5">★★★★★ (5 Stars - Exceptional)</option>
+                                                <option value="4">★★★★☆ (4 Stars - Good)</option>
+                                                <option value="3">★★★☆☆ (3 Stars - Average)</option>
+                                                <option value="2">★★☆☆☆ (2 Stars - Disappointing)</option>
+                                                <option value="1">★☆☆☆☆ (1 Star - Poor)</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label small fw-semibold">Review Title</label>
+                                            <input type="text" class="form-control form-control-sm" id="reviewTitleInput" placeholder="E.g. Outstanding quality" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label small fw-semibold">Your Review</label>
+                                            <textarea class="form-control form-control-sm" id="reviewCommentInput" rows="4" placeholder="How did this product perform? Mention craftsmanship, durability, or fit." required></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-sm w-100" id="btnSubmitReview">
+                                            Submit Review
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Related Products Section -->
+            <div class="mt-5 pt-3">
+                <div class="d-flex justify-content-between align-items-end mb-4">
+                    <div>
+                        <span class="section-subtitle">Curated Pairings</span>
+                        <h2 class="h3 fw-bold mb-0">Related Products</h2>
+                    </div>
+                </div>
+                <div class="row" id="relatedProductsContainer">
+                    <!-- Related products injected dynamically -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer-shall py-4 mt-5 bg-dark text-white text-center">
+        <div class="container">
+            <p class="mb-0">&copy; 2026 PixelMart &bull; MOBILE &bull; LAPTOP &bull; GADGETS &bull; Quetta, Balochistan. Contact: <strong>00816-23-736822</strong></p>
+            <span class="small text-secondary">1-Year Official Hardware Warranty & Instant Printed Bill with every device.</span>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/main.js"></script>
+
+    <!-- Product Detail Script -->
+    <script>
+        let currentProduct = null;
+        const urlParams = new URLSearchParams(window.location.search);
+        const productSlug = urlParams.get('slug');
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!productSlug) {
+                window.location.href = 'shop.html';
+                return;
+            }
+            await loadProductDetail();
+            await loadProductReviews();
+            await loadRelatedProducts();
+        });
+
+        async function loadProductDetail() {
+            try {
+                currentProduct = await API.products.detail(productSlug);
+                renderProduct();
+                document.getElementById('productDetailLoading').classList.add('d-none');
+                document.getElementById('productDetailContent').classList.remove('d-none');
+            } catch (e) {
+                document.getElementById('productDetailLoading').innerHTML = `
+                    <div class="py-5 text-danger">
+                        <i class="bi bi-exclamation-triangle fs-1"></i>
+                        <h4 class="mt-2">Product Not Found</h4>
+                        <p class="text-muted">${e.message || 'The requested product could not be found or is inactive.'}</p>
+                        <a href="shop.html" class="btn btn-outline-primary mt-2">Browse All Products</a>
+                    </div>
+                `;
+            }
+        }
+
+        function renderProduct() {
+            const p = currentProduct;
+            document.title = `${p.name} — PixelMart | Quetta, Balochistan`;
+
+            document.getElementById('breadcrumbCategory').textContent = p.category ? p.category.name : 'Catalog';
+            document.getElementById('breadcrumbProductName').textContent = p.name;
+            document.getElementById('productTitle').textContent = p.name;
+            document.getElementById('productBrandBadge').textContent = p.brand || 'Hardware';
+            document.getElementById('productCategoryBadge').textContent = p.category ? p.category.name : 'Collection';
+            document.getElementById('productSku').textContent = p.sku;
+            document.getElementById('productSpecsText').textContent = p.specs || 'Certified local warranty hardware';
+            document.getElementById('productShortDesc').textContent = p.short_description || p.description.substring(0, 160) + '...';
+            document.getElementById('productFullDescription').innerHTML = `<p>${p.description.replace(/\n/g, '<br><br>')}</p>`;
+
+            // Gallery
+            const allImgs = (p.all_images && p.all_images.length > 0) 
+                ? p.all_images 
+                : (p.main_image ? [p.main_image] : ['../assets/images/placeholder.jpg']);
+            const mainImg = document.getElementById('mainGalleryImage');
+            mainImg.src = allImgs[0];
+
+            const thumbsContainer = document.getElementById('galleryThumbnails');
+            thumbsContainer.innerHTML = '';
+            allImgs.forEach((imgUrl, idx) => {
+                thumbsContainer.innerHTML += `
+                    <div class="thumb-item ${idx === 0 ? 'active' : ''}" onclick="switchMainImage('${imgUrl}', this)">
+                        <img src="${imgUrl}" alt="${p.name} - View ${idx + 1}">
+                    </div>
+                `;
+            });
+
+            // Prices in PKR
+            document.getElementById('currentPriceDisplay').textContent = formatPKR(p.current_price);
+            if (p.is_on_sale) {
+                const orig = document.getElementById('originalPriceDisplay');
+                orig.textContent = formatPKR(p.price);
+                orig.classList.remove('d-none');
+
+                const disc = document.getElementById('discountBadge');
+                disc.textContent = `-${p.discount_percentage}% OFF`;
+                disc.classList.remove('d-none');
+            }
+
+            // Rating Stars
+            const starsContainer = document.getElementById('ratingStars');
+            const avg = p.average_rating || 0;
+            let starHtml = '';
+            for (let i = 1; i <= 5; i++) {
+                starHtml += i <= Math.round(avg) ? '<i class="bi bi-star-fill"></i>' : '<i class="bi bi-star text-muted"></i>';
+            }
+            starsContainer.innerHTML = starHtml;
+            document.getElementById('ratingSummary').textContent = avg > 0 ? `(${avg.toFixed(1)} / 5 • ${p.review_count} reviews)` : '(Verified Spec)';
+
+            // Stock
+            const stockBadge = document.getElementById('stockStatusBadge');
+            const stockNote = document.getElementById('stockCountNote');
+            const addBtn = document.getElementById('btnAddToCartDetail');
+            const qtyInput = document.getElementById('detailQuantityInput');
+
+            if (p.stock <= 0) {
+                stockBadge.className = 'badge bg-secondary';
+                stockBadge.textContent = 'Out of Stock';
+                stockNote.textContent = 'This model is currently sold out in Quetta showroom. Restocking soon.';
+                addBtn.disabled = true;
+                addBtn.innerHTML = '<i class="bi bi-x-circle me-2"></i> Out of Stock';
+                qtyInput.disabled = true;
+            } else if (p.stock <= 5) {
+                stockBadge.className = 'badge bg-warning text-dark';
+                stockBadge.textContent = `Low Stock (${p.stock} units left)`;
+                stockNote.textContent = `Only ${p.stock} units available in Quetta showroom. Order soon.`;
+                qtyInput.max = p.stock;
+            } else {
+                stockBadge.className = 'badge bg-success';
+                stockBadge.textContent = `In Stock (${p.stock} units available)`;
+                stockNote.textContent = 'Available for immediate delivery in Quetta or showroom pickup.';
+                qtyInput.max = p.stock;
+            }
+        }
+
+        function switchMainImage(src, element) {
+            document.getElementById('mainGalleryImage').src = src;
+            document.querySelectorAll('.thumb-item').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        function adjustDetailQty(delta) {
+            const input = document.getElementById('detailQuantityInput');
+            let val = parseInt(input.value) || 1;
+            val += delta;
+            const min = 1;
+            const max = currentProduct ? currentProduct.stock : 100;
+            if (val < min) val = min;
+            if (val > max) val = max;
+            input.value = val;
+        }
+
+        async function handleAddToCartFromDetail() {
+            if (!currentProduct) return;
+            const qty = parseInt(document.getElementById('detailQuantityInput').value) || 1;
+            const btn = document.getElementById('btnAddToCartDetail');
+            const originalText = btn.innerHTML;
+
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Adding...';
+
+            try {
+                const res = await API.cart.add(currentProduct.id, qty);
+                updateCartBadge(res.cart.total_items);
+                showToast(`Added ${qty} × "${currentProduct.name}" to cart.`, 'success');
+                openCartDrawer();
+            } catch (e) {
+                showToast(e.message || 'Failed to add item to cart.', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        }
+
+        async function toggleProductWishlist() {
+            if (!currentProduct) return;
+            const btn = document.getElementById('btnWishlistToggle');
+            await toggleWishlist(currentProduct.id, btn);
+        }
+
+        async function loadProductReviews() {
+            const listContainer = document.getElementById('productReviewsList');
+            try {
+                const reviews = await API.reviews.list(productSlug);
+                if (!reviews || reviews.length === 0) {
+                    listContainer.innerHTML = `
+                        <div class="empty-state py-4 text-center">
+                            <i class="bi bi-chat-square-quote fs-2 text-muted mb-2 d-block"></i>
+                            <h6 class="fw-bold mb-1">No Reviews Yet</h6>
+                            <p class="text-muted small">Be the first to review this product!</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                listContainer.innerHTML = reviews.map(r => `
+                    <div class="review-card">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div class="review-stars">${'<i class="bi bi-star-fill"></i>'.repeat(r.rating)}</div>
+                            <span class="text-muted small">${new Date(r.created_at).toLocaleDateString()}</span>
+                        </div>
+                        <h6 class="fw-bold mb-1">${r.title}</h6>
+                        <p class="review-comment">${r.comment}</p>
+                        <div class="review-author mt-auto">
+                            <span class="fw-semibold">${r.user_name}</span>
+                            ${r.is_verified_purchase ? '<span class="verified-badge"><i class="bi bi-check-circle-fill"></i> Verified Purchase</span>' : ''}
+                        </div>
+                    </div>
+                `).join('');
+            } catch (e) {
+                listContainer.innerHTML = '<p class="text-muted small">Could not load reviews.</p>';
+            }
+        }
+
+        async function handleReviewSubmit(e) {
+            e.preventDefault();
+            if (!window.IS_AUTHENTICATED) {
+                showToast('Please sign in to submit a review.', 'info');
+                setTimeout(() => window.location.href = 'login.html', 1200);
+                return;
+            }
+
+            const rating = parseInt(document.getElementById('reviewRatingInput').value);
+            const title = document.getElementById('reviewTitleInput').value.trim();
+            const comment = document.getElementById('reviewCommentInput').value.trim();
+            const btn = document.getElementById('btnSubmitReview');
+
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Submitting...';
+
+            try {
+                await API.reviews.create({
+                    product_slug: productSlug,
+                    rating,
+                    title,
+                    comment
+                });
+                showToast('Your review has been submitted successfully!', 'success');
+                document.getElementById('writeReviewForm').reset();
+                await loadProductReviews();
+                await loadProductDetail(); // Refresh rating averages
+            } catch (err) {
+                showToast(err.message || 'Failed to submit review.', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'Submit Review';
+            }
+        }
+
+        async function loadRelatedProducts() {
+            const container = document.getElementById('relatedProductsContainer');
+            try {
+                const related = await API.products.related(productSlug);
+                if (!related || related.length === 0) {
+                    container.innerHTML = '<p class="text-muted small col-12">No related products found in this collection.</p>';
+                    return;
+                }
+                container.innerHTML = related.map(p => createProductCardHTML(p, '')).join('');
+            } catch (e) {
+                container.innerHTML = '';
+            }
+        }
+    </script>
+</body>
+</html>

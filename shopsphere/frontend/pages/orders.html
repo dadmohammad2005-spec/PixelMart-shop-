@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders & Tracking &mdash; Shall Shop | Discover More. Shop Better.</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../assets/css/style.css" rel="stylesheet">
+    <script>
+        (function(){
+            const saved = localStorage.getItem('pixelmart_theme') || localStorage.getItem('shall_shop_theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', saved);
+            document.documentElement.setAttribute('data-bs-theme', saved);
+        })();
+    </script>
+</head>
+<body class="bg-light">
+
+    <!-- Navigation Header -->
+    <header class="navbar navbar-expand-lg navbar-shall">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="../index.html">
+                <img src="../assets/images/pixelmart-logo.png" alt="PixelMart Logo" class="pixel-logo-img">
+                <div class="d-flex flex-column">
+                    <span class="pixel-logo-text">Pixel<span class="mart-part">Mart</span></span>
+                    <span class="pixel-tagline">MOBILE &bull; LAPTOP &bull; GADGETS</span>
+                </div>
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <i class="bi bi-list fs-2 text-dark"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="shop.html">Shop</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../index.html#newArrivalsSection">New Arrivals</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="orders.html">Orders</a></li>
+                    <li class="nav-item"><a class="nav-link" href="wishlist.html">Wishlist</a></li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0">
+                    <button type="button" class="header-action-btn theme-toggle-btn" title="Toggle Dark/Light Mode" aria-label="Toggle Theme">
+                        <i class="bi bi-moon-stars-fill theme-toggle-icon text-purple"></i>
+                    </button>
+                    <a href="wishlist.html" class="header-action-btn" title="Wishlist">
+                        <i class="bi bi-heart fs-5"></i>
+                        <span class="badge-counter wishlist-badge d-none">0</span>
+                    </a>
+                    <a href="cart.html" class="header-action-btn" title="Cart">
+                        <i class="bi bi-bag fs-5"></i>
+                        <span class="badge-counter cart-badge d-none">0</span>
+                    </a>
+                    <div id="headerAuthLinks" class="d-flex align-items-center gap-2 ms-2">
+                        <a href="login.html" class="btn btn-sm btn-outline-primary">Sign In</a>
+                        <a href="register.html" class="btn btn-sm btn-primary">Register</a>
+                    </div>
+                    <div id="headerUserDropdown" class="dropdown d-none ms-2">
+                        <button class="btn btn-sm btn-light dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle fs-5 text-primary"></i>
+                            <span id="headerUserName" class="fw-semibold">Account</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm">
+                            <li><a class="dropdown-item" href="account.html"><i class="bi bi-person me-2"></i>My Profile</a></li>
+                            <li><a class="dropdown-item active" href="orders.html"><i class="bi bi-box-seam me-2"></i>My Orders</a></li>
+                            <li><a class="dropdown-item" href="wishlist.html"><i class="bi bi-heart me-2"></i>Wishlist</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item text-danger" onclick="handleLogout()"><i class="bi bi-box-arrow-right me-2"></i>Sign Out</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="bg-white border-bottom py-4 mb-4">
+        <div class="container d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div>
+                <h1 class="h3 fw-bold mb-1">Orders & Shipments</h1>
+                <p class="text-muted small mb-0">Track real-time shipment status, order history, and cancellation.</p>
+            </div>
+            <!-- Guest Order Lookup Trigger -->
+            <div>
+                <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#guestLookupModal">
+                    <i class="bi bi-search me-1"></i> Track Guest Order
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <main class="container pb-5">
+        <!-- Order List Container -->
+        <div id="ordersLoading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="text-muted mt-2">Loading your orders...</p>
+        </div>
+
+        <div id="emptyOrdersView" class="empty-state d-none max-w-600 mx-auto">
+            <i class="bi bi-box-seam empty-state-icon"></i>
+            <h4 class="fw-bold mb-2">No Orders Found</h4>
+            <p class="text-muted mb-4">You have not placed any orders yet. Start exploring our collections today.</p>
+            <a href="shop.html" class="btn btn-primary">Start Shopping &rarr;</a>
+        </div>
+
+        <div id="ordersListContainer" class="d-flex flex-column gap-3 d-none">
+            <!-- Order cards injected dynamically -->
+        </div>
+    </main>
+
+    <!-- Order Detail Modal -->
+    <div class="modal fade" id="orderDetailModal" tabindex="-1" aria-labelledby="orderDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header border-bottom">
+                    <div>
+                        <h5 class="modal-title fw-bold" id="modalOrderNumber">ORD-0000</h5>
+                        <span class="text-muted small" id="modalOrderDate">Placed on ...</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="button" class="btn btn-sm btn-outline-dark" onclick="printModalOrderBill()">
+                            <i class="bi bi-printer me-1"></i> Print Bill
+                        </button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                </div>
+                <div class="modal-body p-4">
+                    <div id="modalOrderLoading" class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status"></div>
+                    </div>
+                    <div id="modalOrderContent" class="d-none">
+                        <!-- Status Bar -->
+                        <div class="p-3 bg-light rounded-3 d-flex justify-content-between align-items-center mb-4">
+                            <div>
+                                <span class="small text-muted d-block">Order Status:</span>
+                                <span class="badge" id="modalStatusBadge">PENDING</span>
+                            </div>
+                            <div>
+                                <span class="small text-muted d-block">Payment:</span>
+                                <span class="badge bg-secondary" id="modalPaymentStatusBadge">PENDING</span>
+                            </div>
+                            <div id="modalCancelBtnWrapper">
+                                <button type="button" class="btn btn-sm btn-outline-danger" id="btnCancelOrder" onclick="handleCancelActiveOrder()">
+                                    Cancel Order
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Products snapshot -->
+                        <h6 class="fw-bold mb-3">Items in this Order</h6>
+                        <div id="modalItemsList" class="d-flex flex-column gap-2 mb-4">
+                            <!-- Items -->
+                        </div>
+
+                        <!-- Financials & Shipping Breakdown -->
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="p-3 border rounded-3 h-100">
+                                    <h6 class="fw-bold small text-uppercase text-muted mb-2">Shipping Information</h6>
+                                    <div id="modalShippingSnapshot" class="small">
+                                        <!-- Address -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="p-3 border rounded-3 h-100 bg-light">
+                                    <h6 class="fw-bold small text-uppercase text-muted mb-2">Cost Breakdown</h6>
+                                    <div class="d-flex justify-content-between small mb-1">
+                                        <span>Subtotal:</span>
+                                        <strong id="modalSubtotal">$0.00</strong>
+                                    </div>
+                                    <div class="d-flex justify-content-between small mb-1">
+                                        <span>Shipping:</span>
+                                        <span id="modalShippingCost">$0.00</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between small text-success mb-1" id="modalDiscountRow">
+                                        <span>Discount:</span>
+                                        <span id="modalDiscountAmount">-$0.00</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between border-top pt-2 mt-2">
+                                        <span class="fw-bold">Total Amount:</span>
+                                        <strong class="fs-5 text-primary" id="modalTotalAmount">$0.00</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Guest Order Lookup Modal -->
+    <div class="modal fade" id="guestLookupModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4 p-4">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold">Lookup Guest Order</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted small">Enter the order number and the billing email address used during checkout.</p>
+                    <form id="guestLookupForm" onsubmit="handleGuestLookup(event)">
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Order Number</label>
+                            <input type="text" class="form-control" id="lookupOrderNumber" required placeholder="ORD-20261030-XXXX">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Billing Email Address</label>
+                            <input type="email" class="form-control" id="lookupEmail" required placeholder="customer@example.com">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100" id="btnSubmitLookup">
+                            Find Order &rarr;
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-shall text-center py-4 mt-5">
+        <div class="container small text-secondary">
+            &copy; 2026 Shall Shop International Inc. All rights reserved. "Discover More. Shop Better."
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/main.js"></script>
+
+    <!-- Orders Script -->
+    <script>
+        let activeOrderNumber = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const specificOrder = urlParams.get('order');
+
+            if (specificOrder) {
+                openOrderDetailModal(specificOrder);
+            }
+
+            const status = await API.auth.status();
+            if (status.is_authenticated) {
+                loadUserOrders();
+            } else {
+                document.getElementById('ordersLoading').classList.add('d-none');
+                document.getElementById('emptyOrdersView').classList.remove('d-none');
+                document.getElementById('emptyOrdersView').querySelector('h4').textContent = 'Guest Order Tracking';
+                document.getElementById('emptyOrdersView').querySelector('p').textContent = 'Please sign in to view your saved order history, or use the "Track Guest Order" button above.';
+            }
+        });
+
+        async function loadUserOrders() {
+            try {
+                const orders = await API.orders.myOrders();
+                document.getElementById('ordersLoading').classList.add('d-none');
+
+                if (!orders || orders.length === 0) {
+                    document.getElementById('emptyOrdersView').classList.remove('d-none');
+                    return;
+                }
+
+                document.getElementById('ordersListContainer').classList.remove('d-none');
+                document.getElementById('ordersListContainer').innerHTML = orders.map(o => {
+                    const badgeClass = getStatusBadgeClass(o.status);
+                    return `
+                        <div class="card border-0 shadow-sm rounded-3 p-4 bg-white">
+                            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                                <div>
+                                    <span class="font-monospace fw-bold fs-6 text-primary me-2">${o.order_number}</span>
+                                    <span class="badge ${badgeClass}">${o.status}</span>
+                                    <div class="text-muted small mt-1">Placed on ${new Date(o.created_at).toLocaleDateString()} • ${o.total_items} items</div>
+                                </div>
+                                <div class="d-flex align-items-center gap-3 ms-auto">
+                                    <span class="fw-bold fs-5 text-dark">${formatPKR(o.total_amount)}</span>
+                                    <button class="btn btn-outline-primary btn-sm" onclick="openOrderDetailModal('${o.order_number}')">
+                                        View Details & Bill &rarr;
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (e) {
+                document.getElementById('ordersLoading').innerHTML = '<div class="text-danger">Failed to load orders.</div>';
+            }
+        }
+
+        function getStatusBadgeClass(status) {
+            switch (status) {
+                case 'DELIVERED': return 'bg-success';
+                case 'SHIPPED': return 'bg-info text-dark';
+                case 'PROCESSING':
+                case 'CONFIRMED': return 'bg-primary';
+                case 'CANCELLED': return 'bg-danger';
+                default: return 'bg-warning text-dark';
+            }
+        }
+
+        async function openOrderDetailModal(orderNumber, email = '') {
+            activeOrderNumber = orderNumber;
+            const modal = new bootstrap.Modal(document.getElementById('orderDetailModal'));
+            modal.show();
+
+            document.getElementById('modalOrderLoading').classList.remove('d-none');
+            document.getElementById('modalOrderContent').classList.add('d-none');
+
+            try {
+                const order = await API.orders.detail(orderNumber, email);
+                renderModalOrder(order);
+                document.getElementById('modalOrderLoading').classList.add('d-none');
+                document.getElementById('modalOrderContent').classList.remove('d-none');
+            } catch (e) {
+                document.getElementById('modalOrderLoading').innerHTML = `
+                    <div class="text-danger py-3">
+                        <i class="bi bi-shield-x fs-2 d-block mb-1"></i>
+                        ${e.message || 'Could not access order details. Please verify authorization.'}
+                    </div>
+                `;
+            }
+        }
+
+        function renderModalOrder(o) {
+            document.getElementById('modalOrderNumber').textContent = o.order_number;
+            document.getElementById('modalOrderDate').textContent = `Placed on ${new Date(o.created_at).toLocaleString()}`;
+
+            const statusBadge = document.getElementById('modalStatusBadge');
+            statusBadge.className = `badge ${getStatusBadgeClass(o.status)}`;
+            statusBadge.textContent = o.status;
+
+            const paymentBadge = document.getElementById('modalPaymentStatusBadge');
+            paymentBadge.className = `badge ${o.payment_status === 'PAID' ? 'bg-success' : 'bg-warning text-dark'}`;
+            paymentBadge.textContent = `${o.payment_method}: ${o.payment_status}`;
+
+            // Cancel button
+            const cancelBtnWrapper = document.getElementById('modalCancelBtnWrapper');
+            if (o.can_cancel) {
+                cancelBtnWrapper.classList.remove('d-none');
+            } else {
+                cancelBtnWrapper.classList.add('d-none');
+            }
+
+            // Items
+            document.getElementById('modalItemsList').innerHTML = o.items.map(i => `
+                <div class="d-flex align-items-center justify-content-between p-2 border rounded-2">
+                    <div class="d-flex align-items-center gap-2">
+                        <img src="${i.product_image_url || '../assets/images/placeholder.jpg'}" alt="" style="width: 44px; height: 44px; object-fit: cover;" class="rounded" onerror="this.src='https://placehold.co/88x88/f8fafc/0f172a?text=PixelMart'">
+                        <div>
+                            <strong class="d-block small">${i.product_name}</strong>
+                            <span class="text-muted" style="font-size: 0.75rem;">SKU: ${i.product_sku} • Qty: ${i.quantity}</span>
+                        </div>
+                    </div>
+                    <span class="fw-bold small">${formatPKR(i.line_total)}</span>
+                </div>
+            `).join('');
+
+            // Shipping
+            document.getElementById('modalShippingSnapshot').innerHTML = `
+                <div><strong>${o.shipping_name}</strong></div>
+                <div>${o.shipping_address_line1} ${o.shipping_address_line2 || ''}</div>
+                <div>${o.shipping_city}, ${o.shipping_state} ${o.shipping_postal_code}</div>
+                <div>${o.shipping_country} • ${o.shipping_phone}</div>
+                <div class="text-muted mt-1">Delivery: ${o.shipping_method.toUpperCase()}</div>
+            `;
+
+            // Cost breakdown
+            document.getElementById('modalSubtotal').textContent = formatPKR(o.subtotal);
+            document.getElementById('modalShippingCost').textContent = parseFloat(o.shipping_cost) === 0 ? 'FREE in Quetta' : formatPKR(o.shipping_cost);
+            document.getElementById('modalTotalAmount').textContent = formatPKR(o.total_amount);
+
+            if (parseFloat(o.discount_amount) > 0) {
+                document.getElementById('modalDiscountRow').classList.remove('d-none');
+                document.getElementById('modalDiscountAmount').textContent = `-${formatPKR(o.discount_amount)}`;
+            } else {
+                document.getElementById('modalDiscountRow').classList.add('d-none');
+            }
+        }
+
+        async function handleCancelActiveOrder() {
+            if (!activeOrderNumber) return;
+            if (!confirm('Are you sure you want to cancel this order? Inventory will be restored immediately.')) return;
+
+            const btn = document.getElementById('btnCancelOrder');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Cancelling...';
+
+            try {
+                const res = await API.orders.cancel(activeOrderNumber);
+                showToast(res.message || 'Order cancelled.', 'info');
+                renderModalOrder(res.order);
+                loadUserOrders();
+            } catch (e) {
+                showToast(e.message || 'Failed to cancel order.', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'Cancel Order';
+            }
+        }
+
+        async function handleGuestLookup(e) {
+            e.preventDefault();
+            const orderNum = document.getElementById('lookupOrderNumber').value.trim();
+            const email = document.getElementById('lookupEmail').value.trim();
+
+            const modalEl = document.getElementById('guestLookupModal');
+            const guestModal = bootstrap.Modal.getInstance(modalEl);
+            if (guestModal) guestModal.hide();
+
+            openOrderDetailModal(orderNum, email);
+        }
+
+        function printModalOrderBill() {
+            if (!currentActiveOrder) {
+                showToast('No active order to print.', 'info');
+                return;
+            }
+            const o = currentActiveOrder;
+            document.getElementById('billOrderNumber').textContent = o.order_number;
+            document.getElementById('billOrderDate').textContent = `Date: ${new Date(o.created_at).toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}`;
+            const isPaid = o.payment_status === 'COMPLETED' || o.payment_status === 'PAID';
+            const badge = document.getElementById('billPaymentBadge');
+            if (badge) {
+                badge.textContent = isPaid ? 'PAID & VERIFIED' : `${o.payment_status || 'PENDING'}`;
+                badge.className = isPaid ? 'invoice-badge-status' : 'invoice-badge-status pending';
+            }
+            document.getElementById('billCustomerName').textContent = o.customer_name || 'Customer';
+            document.getElementById('billCustomerEmail').textContent = o.customer_email || '';
+            document.getElementById('billCustomerPhone').textContent = o.customer_phone || '';
+            document.getElementById('billShippingName').textContent = o.shipping_name || o.customer_name;
+            document.getElementById('billShippingAddress').textContent = `${o.shipping_address_line1} ${o.shipping_address_line2 || ''}`;
+            document.getElementById('billShippingCityState').textContent = `${o.shipping_city}, ${o.shipping_state} ${o.shipping_postal_code}, ${o.shipping_country}`;
+            document.getElementById('billShippingMethod').textContent = o.shipping_method ? o.shipping_method.toUpperCase() : 'STANDARD';
+
+            const tbody = document.getElementById('billItemsTableBody');
+            tbody.innerHTML = '';
+            if (o.items && o.items.length > 0) {
+                o.items.forEach((item, idx) => {
+                    const price = parseFloat(item.price || 0);
+                    const qty = item.quantity || 1;
+                    const lineTotal = parseFloat(item.line_total || (price * qty));
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${idx + 1}</td>
+                            <td><strong>${item.product_name}</strong></td>
+                            <td><span class="font-monospace text-muted small">${item.product_sku}</span></td>
+                            <td class="text-center">${qty}</td>
+                            <td class="text-end">${formatPKR(price)}</td>
+                            <td class="text-end fw-semibold">${formatPKR(lineTotal)}</td>
+                        </tr>
+                    `;
+                });
+            }
+
+            document.getElementById('billSubtotal').textContent = formatPKR(o.subtotal);
+            document.getElementById('billShipping').textContent = parseFloat(o.shipping_cost) > 0 ? formatPKR(o.shipping_cost) : 'FREE in Quetta';
+            const disc = parseFloat(o.discount_amount || 0);
+            const discRow = document.getElementById('billDiscountRow');
+            if (disc > 0) {
+                discRow.classList.remove('d-none');
+                document.getElementById('billDiscount').textContent = `-${formatPKR(disc)}`;
+            } else {
+                discRow.classList.add('d-none');
+            }
+            document.getElementById('billTotalAmount').textContent = formatPKR(o.total_amount);
+            document.getElementById('billBarcode').textContent = `*${o.order_number}*`;
+
+            window.print();
+        }
+        window.printModalOrderBill = printModalOrderBill;
+    </script>
+
+    <!-- Hidden Printable Invoice Element for Orders Modal -->
+    <div id="printableInvoice" class="invoice-bill-container d-none">
+        <div class="invoice-header d-flex justify-content-between align-items-start border-bottom pb-3 mb-3">
+            <div class="d-flex align-items-center gap-2">
+                <img src="../assets/images/pixelmart-logo.png" alt="PixelMart Logo" style="height: 48px;">
+                <div>
+                    <div class="invoice-brand mb-0">
+                        <span class="pixel-logo-text fs-4">Pixel<span class="mart-part text-coral">Mart</span></span>
+                    </div>
+                    <div class="small text-muted fw-bold">MOBILE &bull; LAPTOP &bull; GADGETS</div>
+                    <div class="small text-muted">Showroom: Quetta, Balochistan, Pakistan &bull; Phone: <strong>00816-23-736822</strong></div>
+                </div>
+            </div>
+            <div class="text-end">
+                <h3 class="fw-bold mb-1 text-dark">OFFICIAL BILL</h3>
+                <div class="fw-bold font-monospace text-primary" id="billOrderNumber">ORD-0000</div>
+                <div class="small text-muted" id="billOrderDate">Date: ...</div>
+                <div class="mt-1">
+                    <span class="invoice-badge-status" id="billPaymentBadge">VERIFIED ORDER</span>
+                </div>
+            </div>
+        </div>
+        <div class="row g-4 mb-4">
+            <div class="col-sm-6 text-start">
+                <h6 class="fw-bold text-uppercase small text-muted mb-2">Customer / Billed To:</h6>
+                <p class="mb-1 fw-bold text-dark" id="billCustomerName">Customer Name</p>
+                <p class="mb-1 text-muted small" id="billCustomerEmail">customer@example.com</p>
+                <p class="mb-0 text-muted small" id="billCustomerPhone">+92 300 0000000</p>
+            </div>
+            <div class="col-sm-6 text-start text-sm-end">
+                <h6 class="fw-bold text-uppercase small text-muted mb-2">Shipped / Handed To:</h6>
+                <p class="mb-1 fw-bold text-dark" id="billShippingName">Recipient Name</p>
+                <p class="mb-1 text-muted small" id="billShippingAddress">...</p>
+                <p class="mb-1 text-muted small" id="billShippingCityState">Quetta, Balochistan, Pakistan</p>
+                <p class="mb-0 text-muted small"><strong>Delivery:</strong> <span id="billShippingMethod">Quetta Handover</span></p>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="invoice-items-table w-100">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Hardware Description</th>
+                        <th>SKU</th>
+                        <th class="text-center">Qty</th>
+                        <th class="text-end">Unit Price (PKR)</th>
+                        <th class="text-end">Line Total (PKR)</th>
+                    </tr>
+                </thead>
+                <tbody id="billItemsTableBody"></tbody>
+            </table>
+        </div>
+        <div class="d-flex justify-content-end mb-4">
+            <table class="invoice-totals-table">
+                <tr>
+                    <td class="text-muted pe-3">Subtotal:</td>
+                    <td class="text-end fw-semibold" id="billSubtotal">PKR 0</td>
+                </tr>
+                <tr>
+                    <td class="text-muted pe-3">Delivery Fee:</td>
+                    <td class="text-end fw-semibold" id="billShipping">FREE in Quetta</td>
+                </tr>
+                <tr id="billDiscountRow" class="d-none">
+                    <td class="text-success pe-3">Voucher Discount:</td>
+                    <td class="text-end text-success fw-semibold" id="billDiscount">-PKR 0</td>
+                </tr>
+                <tr class="invoice-grand-total">
+                    <td class="pe-3"><strong>Total Amount:</strong></td>
+                    <td class="text-end"><strong id="billTotalAmount">PKR 0</strong></td>
+                </tr>
+            </table>
+        </div>
+        <div class="invoice-footer-note border-top pt-3 text-center">
+            <p class="mb-1 fw-bold text-dark">Thank you for purchasing from PixelMart &mdash; Quetta, Balochistan!</p>
+            <p class="mb-2 text-muted small">1-Year Official Hardware Testing & Replacement Warranty Included. Please retain this bill for all service inquiries.</p>
+            <div class="barcode-strip font-monospace fw-bold" id="billBarcode">*ORD-0000*</div>
+        </div>
+    </div>
+    </script>
+</body>
+</html>

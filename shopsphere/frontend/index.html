@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PixelMart &mdash; MOBILE • LAPTOP • GADGETS | Quetta, Balochistan</title>
+    <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="assets/css/style.css" rel="stylesheet">
+    <script>
+        (function(){
+            const saved = localStorage.getItem('pixelmart_theme') || localStorage.getItem('shall_shop_theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', saved);
+            document.documentElement.setAttribute('data-bs-theme', saved);
+        })();
+    </script>
+</head>
+<body>
+
+    <!-- A. Announcement Bar -->
+    <div class="announcement-bar text-center">
+        <div class="container d-flex align-items-center justify-content-between flex-wrap gap-2" id="announcementBarContent">
+            <span>⚡ <strong>PixelMart Quetta</strong> &bull; Genuine Laptops, Mobile Phones & Tech Gadgets with 1-Year Local Warranty</span>
+            <div class="d-flex align-items-center gap-3 small">
+                <span><i class="bi bi-telephone-fill me-1 text-warning"></i> 00816-23-736822</span>
+                <span class="d-none d-md-inline">&bull; Quetta, Balochistan</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- B. Navigation Header -->
+    <header class="navbar navbar-expand-lg navbar-shall">
+        <div class="container">
+            <!-- Brand Logo -->
+            <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+                <img src="assets/images/pixelmart-logo.png" alt="PixelMart Logo" class="pixel-logo-img">
+                <div class="d-flex flex-column">
+                    <span class="pixel-logo-text">Pixel<span class="mart-part">Mart</span></span>
+                    <span class="pixel-tagline">MOBILE &bull; LAPTOP &bull; GADGETS</span>
+                </div>
+            </a>
+
+            <!-- Mobile Toggle -->
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="bi bi-list fs-2 text-dark"></i>
+            </button>
+
+            <!-- Nav Links & Search -->
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-3">
+                    <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="pages/shop.html">All Catalog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="pages/shop.html?category=laptops"><i class="bi bi-laptop me-1 text-primary"></i>Laptops</a></li>
+                    <li class="nav-item"><a class="nav-link" href="pages/shop.html?category=mobile-phones"><i class="bi bi-phone me-1 text-primary"></i>Mobiles</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#newArrivalsSection">New Arrivals</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#bestSellersSection">Best Sellers</a></li>
+                    <li class="nav-item"><a class="nav-link" href="pages/about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="pages/contact.html">Contact</a></li>
+                </ul>
+
+                <!-- Live Search Form in Header -->
+                <form class="header-search-form me-lg-3 my-2 my-lg-0" role="search" onsubmit="event.preventDefault(); triggerQuickSearch(this.querySelector('input').value);">
+                    <i class="bi bi-search header-search-icon"></i>
+                    <input class="form-control header-search-input" type="search" id="headerLiveSearchInput" placeholder="Search HP, ThinkPad, iPhone 15, S24..." aria-label="Search" oninput="handleHeaderLiveSearch(this.value)">
+                </form>
+
+                <!-- Actions: Theme Toggle, Wishlist, Cart Drawer, Account -->
+                <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0">
+                    <!-- Dark / Light Theme Toggle -->
+                    <button type="button" class="header-action-btn theme-toggle-btn" title="Toggle Dark/Light Mode" aria-label="Toggle Theme">
+                        <i class="bi bi-moon-stars-fill theme-toggle-icon text-primary"></i>
+                    </button>
+
+                    <!-- Wishlist -->
+                    <a href="pages/wishlist.html" class="header-action-btn" title="Saved Wishlist" aria-label="Wishlist">
+                        <i class="bi bi-heart fs-5"></i>
+                        <span class="badge-counter wishlist-badge d-none">0</span>
+                    </a>
+
+                    <!-- Cart Drawer Trigger -->
+                    <button type="button" class="header-action-btn header-cart-drawer-btn position-relative" title="Open Cart Summary Drawer" aria-label="Shopping Cart">
+                        <i class="bi bi-cart3 fs-5 text-primary"></i>
+                        <span class="badge-counter cart-badge d-none">0</span>
+                    </button>
+
+                    <!-- Account Section -->
+                    <div id="headerAuthLinks" class="d-flex align-items-center gap-2 ms-1">
+                        <a href="pages/login.html" class="btn btn-sm btn-outline-primary">Sign In</a>
+                        <a href="pages/register.html" class="btn btn-sm btn-primary">Register</a>
+                    </div>
+
+                    <div id="headerUserDropdown" class="dropdown d-none ms-1">
+                        <button class="btn btn-sm btn-light dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle fs-5 text-primary"></i>
+                            <span id="headerUserName" class="fw-semibold">Account</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-3">
+                            <li><a class="dropdown-item py-2" href="pages/account.html"><i class="bi bi-person me-2"></i>My Profile</a></li>
+                            <li><a class="dropdown-item py-2" href="pages/orders.html"><i class="bi bi-box-seam me-2"></i>My Orders & Bill</a></li>
+                            <li><a class="dropdown-item py-2" href="pages/wishlist.html"><i class="bi bi-heart me-2"></i>Wishlist</a></li>
+                            <li id="headerAdminLink" class="d-none"><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item py-2 text-primary fw-semibold d-none" id="adminPortalItem" href="pages/admin.html"><i class="bi bi-speedometer2 me-2"></i>Admin Dashboard</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item py-2 text-danger" onclick="handleLogout()"><i class="bi bi-box-arrow-right me-2"></i>Sign Out</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- C. Hero Section -->
+    <section class="hero-section py-5">
+        <div class="container">
+            <div class="row align-items-center gy-5">
+                <div class="col-lg-7">
+                    <div class="d-inline-flex align-items-center gap-2 mb-3 px-3 py-1 bg-light rounded-pill border">
+                        <i class="bi bi-geo-alt-fill text-danger"></i>
+                        <span class="small fw-bold text-dark">Quetta, Balochistan Official Store</span>
+                        <span class="badge bg-coral text-white rounded-pill">00816-23-736822</span>
+                    </div>
+                    <h1 class="hero-title mb-3">
+                        Laptops & Mobile Phones.<br>
+                        <span class="text-primary">Tested & Verified in Quetta.</span>
+                    </h1>
+                    <p class="hero-description text-muted fs-5 mb-4">
+                        Discover authentic HP, Dell, Lenovo ThinkPad, Sony, Apple iPhone, Samsung, Motorola, Nokia, Vivo, and Oppo with genuine market specifications, transparent PKR pricing, and 1-year local warranty.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3 mb-4">
+                        <a href="pages/shop.html?category=laptops" class="btn btn-primary btn-lg px-4 py-3">
+                            <i class="bi bi-laptop me-2"></i> Shop Laptops in PKR
+                        </a>
+                        <a href="pages/shop.html?category=mobile-phones" class="btn btn-outline-primary btn-lg px-4 py-3">
+                            <i class="bi bi-phone me-2"></i> Shop Mobile Phones
+                        </a>
+                        <button type="button" class="btn btn-light border btn-lg px-4 py-3" onclick="openCartDrawer()">
+                            <i class="bi bi-bag-check me-2 text-primary"></i> View Cart Drawer
+                        </button>
+                    </div>
+
+                    <!-- Trust indicators -->
+                    <div class="row mt-4 pt-3 g-3 border-top border-light-subtle">
+                        <div class="col-sm-4 d-flex align-items-center gap-2">
+                            <i class="bi bi-truck fs-4 text-primary"></i>
+                            <div class="lh-sm">
+                                <span class="fw-bold d-block text-dark small">Fast Quetta Delivery</span>
+                                <span class="text-muted small">Doorstep dispatch</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 d-flex align-items-center gap-2">
+                            <i class="bi bi-shield-check fs-4 text-primary"></i>
+                            <div class="lh-sm">
+                                <span class="fw-bold d-block text-dark small">100% Tested Specs</span>
+                                <span class="text-muted small">RAM, SSD & Battery</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 d-flex align-items-center gap-2">
+                            <i class="bi bi-printer fs-4 text-primary"></i>
+                            <div class="lh-sm">
+                                <span class="fw-bold d-block text-dark small">Printable Bill</span>
+                                <span class="text-muted small">Instant warranty receipt</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Right: Storefront Photo & Flagship Deal -->
+                <div class="col-lg-5">
+                    <div class="hero-banner-card bg-white p-3 rounded-4 shadow-sm border">
+                        <div class="position-relative mb-3 overflow-hidden rounded-3 border">
+                            <img src="assets/images/pixelmart-storefront.png" alt="PixelMart Storefront Quetta Balochistan" class="img-fluid w-100" style="height: 220px; object-fit: cover;">
+                            <div class="position-absolute bottom-0 start-0 end-0 p-2 bg-dark bg-opacity-75 text-white small d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-shop me-1 text-warning"></i> PixelMart Showroom</span>
+                                <span><i class="bi bi-telephone-outbound me-1"></i> 00816-23-736822</span>
+                            </div>
+                        </div>
+
+                        <!-- Featured Local Deal: HP 840 G2 Core i7 at PKR 70,000 -->
+                        <div class="p-3 bg-light rounded-3 text-center mb-3">
+                            <span class="badge bg-coral text-uppercase mb-2">Local Best Seller • PKR 70,000</span>
+                            <h5 class="fw-bold mb-1">HP EliteBook 840 G2 Core i7</h5>
+                            <p class="text-muted small mb-2">Intel Core i7 5th Gen &bull; 8GB RAM &bull; 256GB SSD &bull; 14" Anti-Glare</p>
+                            <div class="d-flex justify-content-center align-items-baseline gap-2">
+                                <span class="fs-4 fw-bold text-dark">PKR 70,000</span>
+                                <span class="text-decoration-line-through text-muted small">PKR 78,000</span>
+                                <span class="badge bg-success-subtle text-success small">Save PKR 8,000</span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <a href="pages/product-detail.html?slug=hp-elitebook-840-g2-core-i7-5th-gen" class="btn btn-primary flex-grow-1">
+                                View HP Core i7 Specs &rarr;
+                            </a>
+                            <button type="button" class="btn btn-outline-primary" onclick="handleQuickAdd(98, this)" title="Quick Add HP 840 G2">
+                                <i class="bi bi-cart-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- D. Real-Time Search & Brand Filter Bar (KEY REQUIREMENT) -->
+    <section class="py-4 bg-white border-top border-bottom sticky-top" style="top: 73px; z-index: 1020;">
+        <div class="container">
+            <div class="row align-items-center g-3">
+                <!-- Search Input with Live Real-time Matching -->
+                <div class="col-lg-5">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-primary"></i></span>
+                        <input type="text" id="catalogLiveSearchInput" class="form-control border-start-0 bg-light" placeholder="Instant Search: HP Core i7, ThinkPad, iPhone 14, S24..." oninput="handleInstantSearch(this.value)">
+                        <button class="btn btn-outline-secondary" type="button" onclick="clearLiveSearch()" title="Clear Search">
+                            <i class="bi bi-x-circle"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Brand Filter Pills -->
+                <div class="col-lg-7">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="small fw-bold text-uppercase text-muted text-nowrap d-none d-md-inline">
+                            <i class="bi bi-funnel me-1"></i> Brand:
+                        </span>
+                        <div class="brand-filter-bar flex-grow-1" id="brandFilterPillsContainer">
+                            <button type="button" class="brand-pill active" data-brand="" onclick="selectBrandFilter('', this)">All Brands</button>
+                            <button type="button" class="brand-pill" data-brand="HP" onclick="selectBrandFilter('HP', this)">HP</button>
+                            <button type="button" class="brand-pill" data-brand="Dell" onclick="selectBrandFilter('Dell', this)">Dell</button>
+                            <button type="button" class="brand-pill" data-brand="Lenovo" onclick="selectBrandFilter('Lenovo', this)">Lenovo</button>
+                            <button type="button" class="brand-pill" data-brand="Apple" onclick="selectBrandFilter('Apple', this)">Apple</button>
+                            <button type="button" class="brand-pill" data-brand="Samsung" onclick="selectBrandFilter('Samsung', this)">Samsung</button>
+                            <button type="button" class="brand-pill" data-brand="Sony" onclick="selectBrandFilter('Sony', this)">Sony</button>
+                            <button type="button" class="brand-pill" data-brand="Motorola" onclick="selectBrandFilter('Motorola', this)">Motorola</button>
+                            <button type="button" class="brand-pill" data-brand="Nokia" onclick="selectBrandFilter('Nokia', this)">Nokia</button>
+                            <button type="button" class="brand-pill" data-brand="Vivo" onclick="selectBrandFilter('Vivo', this)">Vivo</button>
+                            <button type="button" class="brand-pill" data-brand="Oppo" onclick="selectBrandFilter('Oppo', this)">Oppo</button>
+                            <button type="button" class="brand-pill" data-brand="Asus" onclick="selectBrandFilter('Asus', this)">Asus</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active filter feedback badge -->
+            <div id="filterFeedbackRow" class="mt-2 d-none d-flex align-items-center gap-2 small">
+                <span class="text-muted">Filtering by:</span>
+                <span class="badge bg-primary" id="activeBrandBadge"></span>
+                <span class="badge bg-secondary" id="activeSearchBadge"></span>
+                <button type="button" class="btn btn-sm btn-link text-decoration-none p-0 ms-2 text-danger" onclick="resetAllInstantFilters()">Reset Filters</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- E. Category Departments (Laptops, Mobiles, Gadgets) -->
+    <section class="py-5" id="shopByCategory">
+        <div class="container">
+            <div class="section-header text-center max-w-600 mx-auto mb-4">
+                <span class="section-subtitle text-primary fw-semibold">PixelMart Departments</span>
+                <h2 class="section-title">Shop by Category</h2>
+                <p class="text-muted">Explore high performance laptops, smartphones, and genuine tech accessories.</p>
+            </div>
+
+            <div class="row g-4" id="categoriesContainer">
+                <!-- Dynamically loaded categories -->
+                <div class="col-12 text-center py-4">
+                    <div class="spinner-border text-primary" role="status"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- F. Live Product Catalog Showcase (Updated with Real-Time Filtering) -->
+    <section class="py-5 bg-white border-top border-bottom border-light-subtle" id="catalogShowcaseSection">
+        <div class="container">
+            <div class="d-flex flex-wrap justify-content-between align-items-end mb-4 gap-2">
+                <div>
+                    <span class="section-subtitle text-primary fw-semibold">Live Inventory &bull; Quetta</span>
+                    <h2 class="section-title mb-0" id="catalogShowcaseTitle">Featured Laptops & Mobile Phones</h2>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="small text-muted" id="catalogCountFeedback">Showing products</span>
+                    <a href="pages/shop.html" class="btn btn-sm btn-outline-primary ms-2">
+                        View Complete Catalog <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="row" id="liveProductsContainer">
+                <div class="col-12 text-center py-5">
+                    <div class="spinner-border text-primary" role="status"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- G. Laptops Section -->
+    <section class="py-5" id="laptopsSection">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <div>
+                    <span class="badge bg-primary text-uppercase mb-1">Business & Gaming Ultrabooks</span>
+                    <h2 class="section-title mb-0">Laptops Collection (PKR)</h2>
+                    <p class="text-muted small mb-0">HP Core i7, Dell Latitude & XPS, Lenovo ThinkPad, Sony VAIO, and Apple MacBooks.</p>
+                </div>
+                <a href="pages/shop.html?category=laptops" class="fw-semibold text-primary">
+                    See All Laptops <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="row" id="laptopsProductsContainer">
+                <div class="col-12 text-center py-5">
+                    <div class="spinner-border text-primary" role="status"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- H. Mobile Phones Section -->
+    <section class="py-5 bg-white border-top border-bottom border-light-subtle" id="mobilesSection">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <div>
+                    <span class="badge bg-coral text-uppercase mb-1">PTA Approved Smartphones</span>
+                    <h2 class="section-title mb-0">Mobile Phones (PKR)</h2>
+                    <p class="text-muted small mb-0">Apple iPhone 11-15 Pro Max, Samsung Galaxy, Motorola, Nokia, Vivo, and Oppo.</p>
+                </div>
+                <a href="pages/shop.html?category=mobile-phones" class="fw-semibold text-primary">
+                    See All Mobiles <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="row" id="mobilesProductsContainer">
+                <div class="col-12 text-center py-5">
+                    <div class="spinner-border text-primary" role="status"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- I. Best Sellers -->
+    <section class="py-5" id="bestSellersSection">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <div>
+                    <span class="section-subtitle text-primary fw-semibold">Quetta Customer Favorites</span>
+                    <h2 class="section-title mb-0">Best Sellers</h2>
+                </div>
+                <a href="pages/shop.html?sort=bestseller" class="fw-semibold text-primary">
+                    See All Best Sellers <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="row" id="bestSellersContainer">
+                <div class="col-12 text-center py-5">
+                    <div class="spinner-border text-primary" role="status"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- J. Special Offers & Voucher Banner -->
+    <section class="py-5">
+        <div class="container">
+            <div class="promo-banner bg-dark text-white p-4 p-md-5 rounded-4 shadow">
+                <div class="row align-items-center">
+                    <div class="col-lg-8">
+                        <span class="badge bg-coral text-white text-uppercase px-3 py-2 mb-3">PixelMart Voucher Pass</span>
+                        <h2 class="display-6 fw-bold mb-3">Save 10% on Laptops & Smart Devices</h2>
+                        <p class="text-light opacity-75 mb-4 max-w-500">
+                            Apply exclusive discount code <code class="bg-secondary text-white px-2 py-1 rounded fw-bold border border-light" id="couponCodeWelcome">SHALL10</code> or <code class="bg-secondary text-white px-2 py-1 rounded fw-bold border border-light">PIXEL10</code> at checkout for instant PKR savings.
+                        </p>
+                        <div class="d-flex flex-wrap gap-3">
+                            <a href="pages/shop.html" class="btn btn-primary btn-lg">
+                                Claim Discount & Shop Now
+                            </a>
+                            <button type="button" class="btn btn-outline-light btn-lg" onclick="copyVoucher('SHALL10')">
+                                <i class="bi bi-clipboard me-1"></i> Copy Code SHALL10
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 text-center d-none d-lg-block">
+                        <i class="bi bi-laptop text-primary opacity-50" style="font-size: 10rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- K. New Arrivals (Smooth Scroll Anchor) -->
+    <section class="py-5 bg-white border-top border-bottom border-light-subtle" id="newArrivalsSection">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <div>
+                    <span class="section-subtitle text-primary fw-semibold">Fresh Weekly Inventory</span>
+                    <h2 class="section-title mb-0">New Arrivals</h2>
+                    <p class="text-muted small mb-0">Newly tested laptops and mobile phone models just arrived in Quetta.</p>
+                </div>
+                <a href="pages/shop.html?sort=newest" class="fw-semibold text-primary">
+                    Explore New Drops <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="row" id="newArrivalsContainer">
+                <div class="col-12 text-center py-5">
+                    <div class="spinner-border text-primary" role="status"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- L. Verified Customer Testimonials in Quetta -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="section-header text-center mb-4">
+                <span class="section-subtitle text-primary fw-semibold">Local Feedback</span>
+                <h2 class="section-title">Verified Customer Reviews</h2>
+                <p class="text-muted">Real ratings and experiences from laptop & smartphone buyers in Quetta, Balochistan.</p>
+            </div>
+
+            <div class="row g-4" id="reviewsContainer">
+                <div class="col-12 text-center text-muted py-4">
+                    <div class="spinner-border spinner-border-sm text-primary"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- M. Storefront Information & Location Banner -->
+    <section class="py-5">
+        <div class="container">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+                <div class="row g-0 align-items-center">
+                    <div class="col-md-5">
+                        <img src="assets/images/pixelmart-storefront.png" alt="PixelMart Storefront" class="img-fluid h-100 w-100" style="min-height: 280px; object-fit: cover;">
+                    </div>
+                    <div class="col-md-7 p-4 p-md-5">
+                        <span class="badge bg-coral text-white text-uppercase px-3 py-1 mb-2">Showroom &bull; Quetta</span>
+                        <h3 class="fw-bold mb-2">Visit the PixelMart Experience Center</h3>
+                        <p class="text-muted mb-4">
+                            Need hands-on testing before purchasing? Walk into our Quetta showroom to test laptop keyboard feel, battery health, display color accuracy, and mobile phone cameras with our certified hardware technicians.
+                        </p>
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-geo-alt-fill text-danger fs-4"></i>
+                                    <div>
+                                        <div class="fw-bold small">Location</div>
+                                        <div class="text-muted small">Quetta, Balochistan</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-telephone-fill text-primary fs-4"></i>
+                                    <div>
+                                        <div class="fw-bold small">Call & WhatsApp</div>
+                                        <div class="text-muted small">00816-23-736822</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- N. Footer -->
+    <footer class="footer-shall bg-dark text-white pt-5 pb-4">
+        <div class="container">
+            <div class="row gy-4 pb-4 border-bottom border-secondary">
+                <div class="col-lg-4 col-md-6">
+                    <a class="navbar-brand text-white mb-3 d-inline-flex align-items-center gap-2" href="index.html">
+                        <img src="assets/images/pixelmart-logo.png" alt="PixelMart Logo" style="height: 38px;">
+                        <div>
+                            <span class="fw-bold fs-4">Pixel<span class="text-coral">Mart</span></span>
+                            <span class="d-block small text-secondary" style="font-size: 0.65rem; letter-spacing: 0.1em;">MOBILE &bull; LAPTOP &bull; GADGETS</span>
+                        </div>
+                    </a>
+                    <p class="text-secondary pe-lg-4 small">
+                        <strong>PixelMart &mdash; Quetta, Balochistan</strong><br>
+                        Specializing in brand-certified laptops and mobile phones: HP, Dell, Lenovo ThinkPad, Sony, Apple, Samsung, Motorola, Nokia, Vivo, and Oppo. Local warranty and printed bill with every order.
+                    </p>
+                    <div class="text-secondary small mt-2">
+                        <div><i class="bi bi-telephone me-2 text-primary"></i> <strong>Contact Hotline:</strong> 00816-23-736822</div>
+                        <div><i class="bi bi-geo-alt me-2 text-danger"></i> <strong>Showroom:</strong> Quetta, Balochistan, Pakistan</div>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6 class="text-uppercase fw-bold text-light mb-3">Categories</h6>
+                    <ul class="footer-links list-unstyled">
+                        <li class="mb-2"><a href="pages/shop.html?category=laptops" class="text-secondary text-decoration-none">Laptops</a></li>
+                        <li class="mb-2"><a href="pages/shop.html?category=mobile-phones" class="text-secondary text-decoration-none">Mobile Phones</a></li>
+                        <li class="mb-2"><a href="pages/shop.html?category=gadgets-accessories" class="text-secondary text-decoration-none">Gadgets & Tech</a></li>
+                        <li class="mb-2"><a href="pages/shop.html?brand=HP" class="text-secondary text-decoration-none">HP Laptops</a></li>
+                        <li class="mb-2"><a href="pages/shop.html?brand=Apple" class="text-secondary text-decoration-none">Apple iPhones</a></li>
+                        <li class="mb-2"><a href="pages/shop.html?brand=Samsung" class="text-secondary text-decoration-none">Samsung Galaxy</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 col-md-6 col-6">
+                    <h6 class="text-uppercase fw-bold text-light mb-3">Customer Care</h6>
+                    <ul class="footer-links list-unstyled">
+                        <li class="mb-2"><a href="pages/orders.html" class="text-secondary text-decoration-none">Order Tracking & Print Bill</a></li>
+                        <li class="mb-2"><a href="pages/cart.html" class="text-secondary text-decoration-none">Shopping Cart Summary</a></li>
+                        <li class="mb-2"><a href="pages/wishlist.html" class="text-secondary text-decoration-none">Saved Wishlist</a></li>
+                        <li class="mb-2"><a href="pages/account.html" class="text-secondary text-decoration-none">My Account</a></li>
+                        <li class="mb-2"><a href="pages/contact.html" class="text-secondary text-decoration-none">Quetta Showroom Support</a></li>
+                        <li class="mb-2"><a href="pages/about.html" class="text-secondary text-decoration-none">About PixelMart</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <h6 class="text-uppercase fw-bold text-light mb-3">Showroom & Warranty</h6>
+                    <p class="text-secondary small">
+                        Every laptop and phone undergoes multi-point inspection (RAM, NVMe, Battery, Screen & Ports). Cash on Delivery & Direct Handover available across Quetta.
+                    </p>
+                    <div class="d-flex flex-column gap-1 small text-secondary">
+                        <div><i class="bi bi-shield-check me-2 text-success"></i> 1-Year Local Warranty</div>
+                        <div><i class="bi bi-receipt me-2 text-primary"></i> Instant Printed Invoice</div>
+                        <div><i class="bi bi-truck me-2 text-primary"></i> Free Express Quetta Shipping</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom d-flex flex-wrap justify-content-between align-items-center pt-3 small text-secondary">
+                <span>&copy; 2026 PixelMart &bull; MOBILE &bull; LAPTOP &bull; GADGETS &bull; Quetta, Balochistan. All rights reserved.</span>
+                <div class="d-flex gap-3">
+                    <a href="pages/about.html" class="text-secondary text-decoration-none">About</a>
+                    <a href="pages/contact.html" class="text-secondary text-decoration-none">Contact</a>
+                    <a href="pages/admin.html" class="text-primary fw-semibold text-decoration-none">Staff Portal</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core JS -->
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/main.js"></script>
+
+    <!-- Homepage Dynamic Data & Real-time Filter Script -->
+    <script>
+        let allCatalogProducts = [];
+        let currentSelectedBrand = '';
+        let currentSearchQuery = '';
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            loadFeaturedCategories();
+            loadAllCatalogProducts();
+            loadLaptopsSection();
+            loadMobilesSection();
+            loadBestSellers();
+            loadNewArrivals();
+            loadCustomerReviews();
+        });
+
+        // Copy Voucher Code helper
+        function copyVoucher(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                showToast(`Voucher code ${code} copied! Apply at checkout for PKR discount.`, 'success');
+            }).catch(() => {
+                showToast(`Code: ${code}`, 'info');
+            });
+        }
+
+        // Load Categories
+        async function loadFeaturedCategories() {
+            const container = document.getElementById('categoriesContainer');
+            try {
+                const res = await API.products.categories();
+                const categories = Array.isArray(res) ? res : (res.results || []);
+                if (!categories || categories.length === 0) {
+                    container.innerHTML = '<div class="col-12 text-center text-muted">No categories found.</div>';
+                    return;
+                }
+                const iconMap = {
+                    'laptops': 'bi-laptop',
+                    'mobile-phones': 'bi-phone',
+                    'gadgets-accessories': 'bi-smartwatch',
+                    'electronics': 'bi-cpu',
+                    'watches': 'bi-smartwatch',
+                    'accessories': 'bi-headphones'
+                };
+                container.innerHTML = categories.slice(0, 4).map(cat => `
+                    <div class="col-6 col-md-3">
+                        <a href="pages/shop.html?category=${cat.slug}" class="category-card text-decoration-none d-block p-4 text-center bg-white rounded-3 border shadow-sm h-100">
+                            <div class="category-icon-wrapper mb-3 text-primary fs-1">
+                                <i class="bi ${iconMap[cat.slug] || 'bi-tag'}"></i>
+                            </div>
+                            <h5 class="category-title fw-bold text-dark mb-1">${cat.name}</h5>
+                            <span class="category-count text-muted small">${cat.product_count} items in stock</span>
+                        </a>
+                    </div>
+                `).join('');
+            } catch (e) {
+                container.innerHTML = '<div class="col-12 text-center text-muted">Could not load categories.</div>';
+            }
+        }
+
+        // Load All Products for Real-time Search & Brand Filtering
+        async function loadAllCatalogProducts() {
+            const container = document.getElementById('liveProductsContainer');
+            try {
+                const res = await API.products.list('all=true');
+                allCatalogProducts = Array.isArray(res) ? res : (res.results || []);
+                renderFilteredProducts();
+            } catch (e) {
+                container.innerHTML = '<div class="col-12 text-center text-muted">Could not load live products catalog.</div>';
+            }
+        }
+
+        // Real-Time Filter Execution
+        function renderFilteredProducts() {
+            const container = document.getElementById('liveProductsContainer');
+            const countFeedback = document.getElementById('catalogCountFeedback');
+            const feedbackRow = document.getElementById('filterFeedbackRow');
+            const brandBadge = document.getElementById('activeBrandBadge');
+            const searchBadge = document.getElementById('activeSearchBadge');
+
+            let filtered = allCatalogProducts;
+
+            // Brand Filter
+            if (currentSelectedBrand) {
+                filtered = filtered.filter(p => (p.brand || '').toLowerCase() === currentSelectedBrand.toLowerCase());
+                brandBadge.textContent = `Brand: ${currentSelectedBrand}`;
+                brandBadge.classList.remove('d-none');
+            } else {
+                brandBadge.classList.add('d-none');
+            }
+
+            // Search Query Filter
+            if (currentSearchQuery) {
+                const q = currentSearchQuery.toLowerCase();
+                filtered = filtered.filter(p => 
+                    (p.name || '').toLowerCase().includes(q) ||
+                    (p.brand || '').toLowerCase().includes(q) ||
+                    (p.specs || '').toLowerCase().includes(q) ||
+                    (p.category_name || '').toLowerCase().includes(q)
+                );
+                searchBadge.textContent = `Search: "${currentSearchQuery}"`;
+                searchBadge.classList.remove('d-none');
+            } else {
+                searchBadge.classList.add('d-none');
+            }
+
+            if (currentSelectedBrand || currentSearchQuery) {
+                feedbackRow.classList.remove('d-none');
+            } else {
+                feedbackRow.classList.add('d-none');
+            }
+
+            countFeedback.textContent = `Showing ${filtered.length} of ${allCatalogProducts.length} items`;
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="col-12 py-5 text-center">
+                        <i class="bi bi-search text-muted fs-1 mb-2 d-block"></i>
+                        <h5 class="fw-bold">No Products Found</h5>
+                        <p class="text-muted small">No laptops or phones matched "${currentSearchQuery || currentSelectedBrand}". Try another search term or brand.</p>
+                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="resetAllInstantFilters()">Reset Filters</button>
+                    </div>
+                `;
+                return;
+            }
+
+            // Render up to 8 products in this live section
+            container.innerHTML = filtered.slice(0, 8).map(p => createProductCardHTML(p, 'pages/')).join('');
+        }
+
+        // Instant brand pill click handler
+        function selectBrandFilter(brand, btnEl) {
+            currentSelectedBrand = brand;
+            document.querySelectorAll('#brandFilterPillsContainer .brand-pill').forEach(btn => btn.classList.remove('active'));
+            if (btnEl) btnEl.classList.add('active');
+            renderFilteredProducts();
+        }
+
+        // Instant search input handler
+        function handleInstantSearch(query) {
+            currentSearchQuery = query.trim();
+            renderFilteredProducts();
+        }
+
+        function clearLiveSearch() {
+            document.getElementById('catalogLiveSearchInput').value = '';
+            currentSearchQuery = '';
+            renderFilteredProducts();
+        }
+
+        function resetAllInstantFilters() {
+            currentSelectedBrand = '';
+            currentSearchQuery = '';
+            document.getElementById('catalogLiveSearchInput').value = '';
+            const allBtn = document.querySelector('#brandFilterPillsContainer .brand-pill[data-brand=""]');
+            selectBrandFilter('', allBtn);
+        }
+
+        function handleHeaderLiveSearch(val) {
+            const input = document.getElementById('catalogLiveSearchInput');
+            if (input) {
+                input.value = val;
+                handleInstantSearch(val);
+                // Scroll smoothly to showcase section
+                document.getElementById('catalogShowcaseSection')?.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function triggerQuickSearch(val) {
+            handleHeaderLiveSearch(val);
+        }
+
+        // Load Dedicated Laptops Section (HP, Dell, ThinkPad, Sony, Apple)
+        async function loadLaptopsSection() {
+            const container = document.getElementById('laptopsProductsContainer');
+            try {
+                const res = await API.products.list('category=laptops');
+                const products = Array.isArray(res) ? res : (res.results || []);
+                if (!products || products.length === 0) {
+                    container.innerHTML = '<div class="col-12 text-center text-muted">No laptops found.</div>';
+                    return;
+                }
+                container.innerHTML = products.slice(0, 4).map(p => createProductCardHTML(p, 'pages/')).join('');
+            } catch (e) {
+                container.innerHTML = '<div class="col-12 text-center text-muted">Failed to load laptops.</div>';
+            }
+        }
+
+        // Load Dedicated Mobiles Section (iPhone, Samsung, Motorola, Nokia, Vivo, Oppo)
+        async function loadMobilesSection() {
+            const container = document.getElementById('mobilesProductsContainer');
+            try {
+                const res = await API.products.list('category=mobile-phones');
+                const products = Array.isArray(res) ? res : (res.results || []);
+                if (!products || products.length === 0) {
+                    container.innerHTML = '<div class="col-12 text-center text-muted">No mobile phones found.</div>';
+                    return;
+                }
+                container.innerHTML = products.slice(0, 4).map(p => createProductCardHTML(p, 'pages/')).join('');
+            } catch (e) {
+                container.innerHTML = '<div class="col-12 text-center text-muted">Failed to load mobile phones.</div>';
+            }
+        }
+
+        // Load Best Sellers
+        async function loadBestSellers() {
+            const container = document.getElementById('bestSellersContainer');
+            try {
+                const res = await API.products.bestSellers();
+                const products = Array.isArray(res) ? res : (res.results || []);
+                if (!products || products.length === 0) {
+                    container.innerHTML = '<div class="col-12 text-center text-muted">No best sellers yet.</div>';
+                    return;
+                }
+                container.innerHTML = products.slice(0, 4).map(p => createProductCardHTML(p, 'pages/')).join('');
+            } catch (e) {
+                container.innerHTML = '<div class="col-12 text-center text-muted">Failed to load best sellers.</div>';
+            }
+        }
+
+        // Load New Arrivals
+        async function loadNewArrivals() {
+            const container = document.getElementById('newArrivalsContainer');
+            try {
+                const res = await API.products.newArrivals();
+                const products = Array.isArray(res) ? res : (res.results || []);
+                if (!products || products.length === 0) {
+                    container.innerHTML = '<div class="col-12 text-center text-muted">No new arrivals found.</div>';
+                    return;
+                }
+                container.innerHTML = products.slice(0, 4).map(p => createProductCardHTML(p, 'pages/')).join('');
+            } catch (e) {
+                container.innerHTML = '<div class="col-12 text-center text-muted">Failed to load new arrivals.</div>';
+            }
+        }
+
+        // Load Customer Reviews (Quetta Authenticity)
+        async function loadCustomerReviews() {
+            const container = document.getElementById('reviewsContainer');
+            try {
+                const res = await API.reviews.homepage();
+                const reviews = Array.isArray(res) ? res : (res.results || []);
+                if (!reviews || reviews.length === 0) {
+                    container.innerHTML = `
+                        <div class="col-md-4">
+                            <div class="review-card p-4 bg-white rounded-3 border h-100">
+                                <div class="review-stars text-warning mb-2"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+                                <h6 class="review-title fw-bold">HP 840 G2 Core i7 at PKR 70,000 is unbelievable value</h6>
+                                <p class="review-comment text-muted small">Bought from PixelMart Quetta showroom. Machine condition is pristine 10/10, battery timing 3.5+ hours, SSD is super snappy. Got my printed warranty bill on spot.</p>
+                                <div class="review-author small"><span class="fw-bold">Farhan Mengal</span> &bull; <span class="text-success"><i class="bi bi-patch-check-fill"></i> Quetta Verified Buyer</span></div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="review-card p-4 bg-white rounded-3 border h-100">
+                                <div class="review-stars text-warning mb-2"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+                                <h6 class="review-title fw-bold">ThinkPad T480 Dual Battery keeps coding all day</h6>
+                                <p class="review-comment text-muted small">The hot-swappable dual battery solves Quetta load shedding for software work. 10 hours continuous backup. PixelMart delivered with original 65W Type-C charger.</p>
+                                <div class="review-author small"><span class="fw-bold">Nadir Kasi</span> &bull; <span class="text-success"><i class="bi bi-patch-check-fill"></i> Quetta Verified Buyer</span></div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="review-card p-4 bg-white rounded-3 border h-100">
+                                <div class="review-stars text-warning mb-2"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+                                <h6 class="review-title fw-bold">Samsung S24 Ultra & iPhone 14 Pro PTA Approved</h6>
+                                <p class="review-comment text-muted small">Official PTA approved with valid IMEI verification. PixelMart provides genuine bill receipt and fast doorstep handover. Highly recommended tech shop!</p>
+                                <div class="review-author small"><span class="fw-bold">Bilal Ahmed</span> &bull; <span class="text-success"><i class="bi bi-patch-check-fill"></i> Verified Buyer</span></div>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+                container.innerHTML = reviews.map(r => `
+                    <div class="col-md-4">
+                        <div class="review-card p-4 bg-white rounded-3 border h-100">
+                            <div class="review-stars text-warning mb-2">${'<i class="bi bi-star-fill"></i>'.repeat(r.rating)}</div>
+                            <h6 class="review-title fw-bold">${r.title}</h6>
+                            <p class="review-comment text-muted small">${r.comment}</p>
+                            <div class="review-author small">
+                                <span class="fw-bold">${r.user_name}</span>
+                                ${r.is_verified_purchase ? ' &bull; <span class="text-success"><i class="bi bi-patch-check-fill"></i> Verified Buyer</span>' : ''}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (e) {
+                // Ignore error
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+# Python & Django
+*.py[cod]
+__pycache__/
+*/__pycache__/
+*/*/__pycache__/
+*/*/*/__pycache__/
+*.so
+.Python
+env/
+venv/
+*/venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Secrets and environment variables
+.env
+*/.env
+*/*/.env
+.env.local
+.env.*.local
+*.env
+
+# SQLite Database
+*.sqlite3
+*/*.sqlite3
+*/*/*.sqlite3
+*.db
+
+# Static collected files (collected dynamically during build)
+staticfiles/
+*/staticfiles/
+*/*/staticfiles/
+
+# Logs & test artifacts
+*.log
+.coverage
+htmlcov/
+.pytest_cache/
+.vscode/
+.idea/
+*.swp
+
+# OS generated files
+.DS_Store
+Thumbs.db
+node_modules/

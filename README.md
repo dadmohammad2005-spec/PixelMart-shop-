@@ -1,218 +1,168 @@
-# ShopSphere — Professional Full-Stack E-Commerce Platform
+# PixelMart — Laptops, Mobile Phones & Tech Platform
 
-ShopSphere is an enterprise-grade, modern, full-stack e-commerce web platform engineered for portfolio demonstration and international client presentations. It features a robust Python/Django backend with Django REST Framework, atomic transactions, inventory concurrency locking, secure session-based authentication, and a responsive frontend with a minimalist international design system.
+**PixelMart** is a production-ready, full-stack e-commerce web platform specializing in verified laptops and mobile phones, featuring authentic Pakistani Rupee (PKR) pricing, responsive multi-image cards, real-time live search & brand filtering, dark theme toggle, slide-out cart drawer, and printable invoice/bill generation.
 
----
-
-## 🌟 Key Architecture & Highlights
-
-### 1. Backend Architecture (Django 5.1 & Django REST Framework)
-- **Domain-Driven Modular Apps**: Clean separation of concerns across `accounts`, `products`, `cart`, `orders`, `payments`, `reviews`, `promotions`, and `wishlist`.
-- **Database Concurrency & Integrity**:
-  - `select_for_update()` inventory locking during checkout prevents overselling and race conditions under concurrent load.
-  - Historical snapshots in `OrderItem` preserve the exact product name, SKU, and unit price paid at the time of purchase, ensuring accurate financial records even if product prices or details change later.
-  - Strict database constraints (`CheckConstraint(price >= 0)`, `CheckConstraint(stock >= 0)`).
-- **Cart Session Architecture**:
-  - Unauthenticated guest visitors receive a secure session-based cart.
-  - Seamless automatic cart merging upon customer registration or login, safely handling stock caps and deduplication while preserving session integrity across session rotation (`cycle_key`).
-- **Flexible Dual Authentication**:
-  - Custom `EmailOrUsernameBackend` allows users to sign in seamlessly with either their email or username.
-  - Full CSRF protection and secure session cookies configured for Fetch API requests.
-- **Dynamic Coupon & Promotion Engine**:
-  - Percentage-based or fixed discounts with configurable minimum order thresholds, maximum discount caps, total usage limits, and per-user frequency limits.
-- **Audited Review Moderation**:
-  - Customer review system with verified-purchase eligibility verification directly queried from order records.
-  - Duplicate review prevention per customer/product.
-- **Business Operations Dashboard**:
-  - Real-time revenue calculations strictly derived from completed/confirmed orders (never counting cancelled or unpaid orders).
-  - Low-stock inventory monitoring and one-click CSV business sales report exports.
-
-### 2. Frontend Design System (Bootstrap 5 & Vanilla ES6 Fetch)
-- **International Minimalist Aesthetic**:
-  - Deep navy typography (`#0f172a`), refined blue accents (`#2563eb`), crisp white surfaces, and subtle light-gray borders (`#e2e8f0`).
-  - Restrained elevation shadows, generous whitespace, and typography using *Plus Jakarta Sans* and *Inter*.
-- **Comprehensive Page Suites**:
-  - **Homepage**: Configurable announcement bar, hero banner, featured categories, handpicked featured products, fresh arrivals, best sellers, promotional voucher banner, authentic reviews, and newsletter subscription.
-  - **Shop Catalog**: Multi-attribute filtering (category, price range, stock availability), real-time search, sorting (price asc/desc, rating, bestseller, newest), URL query parameter syncing for bookmarking, and pagination.
-  - **Product Detail**: Multi-angle image gallery with thumbnail switcher, stock level warnings, quantity selector, customer review ratings, review submission form, and related collection products.
-  - **Shopping Cart**: Real-time quantity updates, free shipping progress bar ($100 threshold), promo coupon application, and backend-validated totals.
-  - **Multi-Step Checkout**: Customer information, saved addresses selection, configurable shipping methods, test payment sandbox (Cash on Delivery & Stripe test mode), order review, and instant confirmation.
-  - **Customer Portal**: Personal profile management, saved address book CRUD, password change, order history tracking with cancellation support, and persistent wishlist.
-  - **Staff Operations Dashboard**: Real-time sales metrics, inventory restock alerts, order status transitions with audit notes, and CSV data export.
+Branded for **PixelMart — Quetta, Balochistan** (Contact Hotline: `00816-23-736822`).
 
 ---
 
-## 📁 Project Directory Structure
+## 🌟 Key Features & Highlights
+
+### 1. Catalog & Pakistani Rupee (PKR) Pricing
+- **Laptops**: Popular brands including HP (e.g. HP EliteBook Core i7 5th Gen @ PKR 70,000, HP Envy x360, HP Omen 16), Dell (XPS 13, Latitude, G15), Lenovo ThinkPad (X1 Carbon, T14, Legion 5 Pro), and Sony.
+- **Mobile Phones**: Major flagships and local market favorites including Apple iPhone (13, 14 Pro, 15 Pro Max, 16 Pro Max), Samsung Galaxy (S23, S24 Ultra, Z Fold 6, A55), Motorola Edge 50 Ultra, Nokia G42 5G, Vivo V30 Pro, and Oppo Reno 12 Pro.
+- **Local Warranty & Specs**: Local specifications (RAM, SSD/Storage, Processor/Chipset, Battery health) and 1-Year Local Warranty badges.
+
+### 2. Frontend UI / UX & Interactivity
+- **Theme Engine**: Seamless toggle between **Light Mode** and **Dark Mode** with zero-flicker `<head>` scripts, smooth transitions, and persistent storage across sessions.
+- **Real-Time Live Search & Brand Filters**: Instant filtering by laptop and mobile brands (Apple, HP, Dell, Lenovo, Samsung, Motorola, etc.) with real-time keystroke search.
+- **Multi-Image Interactive Product Cards**: Hover arrow navigation to flip through multiple product angles directly from the catalog grid with counter badges.
+- **Slide-Out Cart Drawer**: Fast side-drawer cart preview with animated counter badges, inline quantity steppers, and quick checkout.
+- **Official Printable Bill / Invoice**: Formatted receipt with official store header, invoice number, itemized table in PKR, tax breakdown, barcode, and automated browser print dialog (`window.print()`).
+
+### 3. Backend Architecture (Django 5.1 & Django REST Framework)
+- **Modular Domain Apps**:
+  - `accounts`: User authentication, profile management, shipping addresses.
+  - `products`: Product catalog, brand categorization, specifications, multi-image gallery, and seed commands.
+  - `cart`: Session-based guest carts with automatic merging upon authentication.
+  - `orders`: Concurrency-safe atomic checkout (`select_for_update()`) preventing overselling, historical price snapshots, order tracking, and invoice generation.
+  - `payments`: Cash on Delivery & Stripe test payment processing.
+  - `reviews`: Verified purchase ratings and feedback.
+  - `promotions`: Announcement bar, coupon validation engine, and newsletter subscriptions.
+  - `wishlist`: Customer favorite product saves.
+- **Static & Media Files**: WhiteNoise for high-efficiency static asset serving in production; media file serving for product imagery.
+- **Automated Test Suite**: 37 comprehensive unit & integration tests covering authentication, cart, checkout concurrency, promotions, and reviews.
+
+---
+
+## 📁 Repository Structure
 
 ```
-shopsphere/
-├── backend/
-│   ├── config/                 # Core settings, WSGI, ASGI, and URL routing
-│   │   ├── __init__.py
-│   │   ├── asgi.py
-│   │   ├── settings.py
-│   │   ├── urls.py
-│   │   ├── views.py
-│   │   └── wsgi.py
-│   ├── apps/
-│   │   ├── accounts/           # User authentication, profile & address management
-│   │   ├── products/           # Categories, products, gallery, and seed commands
-│   │   ├── cart/               # Guest and authenticated cart operations
-│   │   ├── orders/             # Checkout, order items, status tracking, & metrics
-│   │   ├── payments/           # Stripe test mode & COD payment verification
-│   │   ├── reviews/            # Verified customer ratings and reviews
-│   │   ├── promotions/         # Coupons, newsletter, & announcement banners
-│   │   └── wishlist/           # Customer saved item wishlist
-│   ├── tests/                  # 37 Automated unit and integration tests
-│   ├── media/                  # Uploaded and generated product media
-│   ├── static/                 # Static assets for production collectstatic
-│   ├── manage.py
-│   ├── requirements.txt
-│   ├── .env.example
-│   └── .env
-├── frontend/
-│   ├── index.html              # Homepage
-│   ├── assets/
-│   │   ├── css/style.css       # ShopSphere design system stylesheet
-│   │   └── js/
-│   │       ├── api.js          # Centralized Fetch REST client
-│   │       └── main.js         # Global toast, auth, cart, and search state
-│   └── pages/
-│       ├── shop.html           # Product catalog with filters & pagination
-│       ├── product-detail.html # Gallery, review form, & related items
-│       ├── cart.html           # Shopping cart & coupon discounts
-│       ├── checkout.html       # 4-step secure checkout & confirmation
-│       ├── login.html          # User login
-│       ├── register.html       # User registration
-│       ├── account.html        # Customer profile & address management
-│       ├── orders.html         # Order history & status cancellation
-│       ├── wishlist.html       # Customer wishlist
-│       ├── admin.html          # Staff business operations dashboard
-│       ├── about.html          # Brand story & technical architecture
-│       └── contact.html        # Customer care inquiry & FAQs
+├── build.sh                  # Automated Render build script
+├── Procfile                  # Production process command for Gunicorn
+├── render.yaml               # Render Blueprint deployment definition
+├── .gitignore
 ├── README.md
-└── .gitignore
+└── shopsphere/
+    ├── backend/
+    │   ├── manage.py
+    │   ├── requirements.txt
+    │   ├── build.sh
+    │   ├── Procfile
+    │   ├── config/           # Django settings, WSGI, ASGI, and URL routing
+    │   ├── apps/             # Modular Django domain apps
+    │   ├── media/            # Product photography & assets
+    │   ├── static/           # Static files
+    │   └── tests/            # Automated test suite (37 tests)
+    └── frontend/
+        ├── index.html        # Storefront homepage
+        ├── assets/           # CSS, JS, and branding images
+        └── pages/            # Shop catalog, cart, checkout, orders, admin, etc.
 ```
 
 ---
 
-## 🚀 Quickstart Guide (Local Development)
+## 🚀 How to Run Locally
 
-### 1. Prerequisites
-- Python 3.10+ (tested with Python 3.12)
-- Git
+### 1. Clone the repository
+```bash
+git clone https://github.com/dadmohammad2005-spec/PixelMart-shop-.git
+cd PixelMart-shop-
+```
 
-### 2. Backend Setup
-1. Navigate to the backend directory:
-   ```bash
-   cd shopsphere/backend
-   ```
-2. Create and activate a Python virtual environment:
-   ```bash
-   # Windows
-   py -m venv venv
-   .\venv\Scripts\activate
+### 2. Set up Python virtual environment
+```bash
+cd shopsphere/backend
+python -m venv venv
 
-   # macOS / Linux
-   python3 -m venv venv
-   source venv/bin/activate
-   ```
-3. Install package dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-4. Configure environment variables:
-   ```bash
-   # Copy example configuration
-   cp .env.example .env
-   ```
-5. Apply database migrations:
-   ```bash
-   python manage.py migrate
-   ```
-6. Seed database with realistic sample categories, products, images, and coupons:
-   ```bash
-   python manage.py seed_sample_data
-   ```
-   *This command automatically populates 18 products across 6 categories with clean Pillow-generated images, active coupons (`WELCOME10`, `SAVE25`, `FREESHIP`), and a default superuser:*
-   - **Admin Email:** `admin@shopsphere.com`
-   - **Admin Password:** `adminpassword123`
+# On Windows:
+venv\Scripts\activate
+# On macOS/Linux:
+source venv/bin/activate
+```
 
-7. Start the Django development server:
-   ```bash
-   python manage.py runserver 8000
-   ```
+### 3. Install dependencies
+```bash
+pip install -r requirements.txt
+```
 
-### 3. Accessing the Application
-- **Main Website (Full-Stack Single Port Preview):** Open [http://127.0.0.1:8000/](http://127.0.0.1:8000/) in your browser.
-- **REST API v1 Root:** [http://127.0.0.1:8000/api/v1/](http://127.0.0.1:8000/api/v1/)
-- **Django Admin:** [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/)
-- **Business Operations Dashboard:** [http://127.0.0.1:8000/pages/admin.html](http://127.0.0.1:8000/pages/admin.html)
+### 4. Run database migrations & seed sample data
+```bash
+python manage.py migrate
+python manage.py seed_sample_data
+```
+
+### 5. Run the development server
+```bash
+python manage.py runserver 8000
+```
+Open **http://127.0.0.1:8000/** in your browser.
+
+---
+
+## 🌐 How to Deploy on Render
+
+Deploying PixelMart on [Render](https://render.com/) is straightforward.
+
+### Method A: Automated Deployment via `render.yaml` (Recommended)
+
+1. Sign in to your **[Render Dashboard](https://dashboard.render.com/)**.
+2. Click **New +** in the top navigation and select **Blueprint**.
+3. Connect your GitHub account and select the **`PixelMart-shop-`** repository.
+4. Render will automatically detect [`render.yaml`](render.yaml) and configure:
+   - **Service Name**: `pixelmart-store`
+   - **Environment**: Python
+   - **Build Command**: `./build.sh`
+   - **Start Command**: `cd shopsphere/backend && gunicorn config.wsgi:application`
+5. Click **Apply**. Render will run `build.sh` (install dependencies, run migrations, seed products, collect static files) and launch your live site.
+
+---
+
+### Method B: Manual Web Service Setup
+
+If you prefer setting up the web service manually:
+
+1. In Render Dashboard, click **New +** &rarr; **Web Service**.
+2. Connect your GitHub repository **`PixelMart-shop-`**.
+3. Fill in the following settings:
+   - **Name**: `pixelmart-store` (or your preferred name)
+   - **Language**: `Python 3`
+   - **Branch**: `main`
+   - **Root Directory**: *(Leave empty, or set to `.`)*
+   - **Build Command**:
+     ```bash
+     ./build.sh
+     ```
+   - **Start Command**:
+     ```bash
+     cd shopsphere/backend && gunicorn config.wsgi:application
+     ```
+   *(Note: If you choose to set Root Directory to `shopsphere/backend`, use `./build.sh` as Build Command and `gunicorn config.wsgi:application` as Start Command).*
+
+4. **Environment Variables** (under *Advanced*):
+   | Key | Value | Notes |
+   |---|---|---|
+   | `PYTHON_VERSION` | `3.11.9` | Ensures modern Python runtime |
+   | `DJANGO_DEBUG` | `False` | Production mode |
+   | `DJANGO_SECRET_KEY` | *(Click "Generate" on Render)* | Cryptographic key |
+   | `DJANGO_ALLOWED_HOSTS` | `localhost,127.0.0.1,.onrender.com` | Allows your Render domain |
+   | `DATABASE_URL` | *(Optional)* | Connect Render PostgreSQL database string if using Postgres |
+
+5. Click **Create Web Service**. Your app will build and go live at `https://<your-service-name>.onrender.com`!
 
 ---
 
 ## 🧪 Running Automated Tests
 
-ShopSphere includes a comprehensive suite of 37 automated tests verifying critical application workflows:
-
+Run the full Django test suite (37 tests):
 ```bash
-cd shopsphere/backend
 python manage.py test tests
 ```
 
-### Test Coverage Summary:
-- `test_accounts.py`: User registration, password matching, email/username login, logout, profile edits, address book isolation.
-- `test_products.py`: Public vs inactive product visibility, category filtering, min/max price range, search by keyword, sorting (price asc/desc), staff creation permissions.
-- `test_cart.py`: Anonymous session cart, stock validation during add-to-cart, quantity updates, item deletion, clearing cart, session-to-authenticated cart merging.
-- `test_orders.py`: Multi-step checkout, atomic stock deduction, snapshot preservation in OrderItem, order ownership authorization, order cancellation and inventory restoration, admin net revenue calculations.
-- `test_promotions.py`: Coupon validity, percentage vs fixed discounts, minimum order threshold validation, max discount capping, newsletter email format validation, announcement retrieval.
-- `test_reviews.py`: 1–5 star rating validation, verified purchase badge derivation from order records, duplicate review prevention.
-- `test_wishlist.py`: Unauthenticated access restrictions, wishlist item addition, duplicate prevention, move-to-cart workflow.
-
 ---
 
-## 🛡️ Production Deployment Guide
-
-### PostgreSQL Setup
-1. Provision a PostgreSQL instance:
-   ```sql
-   CREATE DATABASE shopsphere_db;
-   CREATE USER shopsphere_user WITH PASSWORD 'your_strong_password';
-   ALTER ROLE shopsphere_user SET client_encoding TO 'utf8';
-   ALTER ROLE shopsphere_user SET default_transaction_isolation TO 'read committed';
-   ALTER ROLE shopsphere_user SET timezone TO 'UTC';
-   GRANT ALL PRIVILEGES ON DATABASE shopsphere_db TO shopsphere_user;
-   ```
-2. In `backend/.env`, set:
-   ```env
-   DB_ENGINE=postgresql
-   DB_NAME=shopsphere_db
-   DB_USER=shopsphere_user
-   DB_PASSWORD=your_strong_password
-   DB_HOST=your-postgres-host
-   DB_PORT=5432
-   ```
-
-### Production Security Settings
-In production, update `backend/.env`:
-```env
-DJANGO_DEBUG=False
-DJANGO_SECRET_KEY=generate-a-strong-random-50-character-string
-DJANGO_ALLOWED_HOSTS=yourdomain.com,www.yourdomain.com
-CORS_ALLOWED_ORIGINS=https://yourdomain.com,https://www.yourdomain.com
-CSRF_TRUSTED_ORIGINS=https://yourdomain.com,https://www.yourdomain.com
-```
-
-### Static & Media Assets
-Run the collection command:
-```bash
-python manage.py collectstatic --noinput
-```
-Configure your web server (Nginx / Caddy / Cloudflare / AWS S3) to serve:
-- Static assets from `backend/staticfiles/`
-- Media uploads from `backend/media/` or cloud storage bucket.
-
----
-
-## 📄 License
-MIT License.
+## 📞 Store Contact Information
+- **Brand**: PixelMart — Laptops, Mobile Phones & Tech Gadgets
+- **Location**: Quetta, Balochistan, Pakistan
+- **Hotline**: `00816-23-736822`
+- **Email**: support@pixelmart.pk

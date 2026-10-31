@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart &mdash; PixelMart | MOBILE • LAPTOP • GADGETS</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../assets/css/style.css" rel="stylesheet">
+    <script>
+        (function(){
+            const saved = localStorage.getItem('pixelmart_theme') || localStorage.getItem('shall_shop_theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', saved);
+            document.documentElement.setAttribute('data-bs-theme', saved);
+        })();
+    </script>
+</head>
+<body>
+
+    <!-- Announcement Bar -->
+    <div class="announcement-bar text-center">
+        <div class="container d-flex align-items-center justify-content-between flex-wrap gap-2" id="announcementBarContent">
+            <span>⚡ <strong>PixelMart Quetta</strong> &bull; Free Quetta Doorstep Delivery on orders over PKR 25,000</span>
+            <span><i class="bi bi-telephone-fill me-1 text-warning"></i> Call: 00816-23-736822</span>
+        </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="navbar navbar-expand-lg navbar-shall">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="../index.html">
+                <img src="../assets/images/pixelmart-logo.png" alt="PixelMart Logo" class="pixel-logo-img">
+                <div class="d-flex flex-column">
+                    <span class="pixel-logo-text">Pixel<span class="mart-part">Mart</span></span>
+                    <span class="pixel-tagline">MOBILE &bull; LAPTOP &bull; GADGETS</span>
+                </div>
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <i class="bi bi-list fs-2 text-dark"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-3">
+                    <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="shop.html">Shop Catalog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="shop.html?category=laptops">Laptops</a></li>
+                    <li class="nav-item"><a class="nav-link" href="shop.html?category=mobile-phones">Mobiles</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../index.html#newArrivalsSection">New Arrivals</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0">
+                    <button type="button" class="header-action-btn theme-toggle-btn" title="Toggle Dark/Light Mode" aria-label="Toggle Theme">
+                        <i class="bi bi-moon-stars-fill theme-toggle-icon text-primary"></i>
+                    </button>
+                    <a href="wishlist.html" class="header-action-btn" title="Wishlist">
+                        <i class="bi bi-heart fs-5"></i>
+                        <span class="badge-counter wishlist-badge d-none">0</span>
+                    </a>
+                    <a href="cart.html" class="header-action-btn active" title="Cart">
+                        <i class="bi bi-cart-fill fs-5 text-primary"></i>
+                        <span class="badge-counter cart-badge d-none">0</span>
+                    </a>
+                    <div id="headerAuthLinks" class="d-flex align-items-center gap-2 ms-2">
+                        <a href="login.html" class="btn btn-sm btn-outline-primary">Sign In</a>
+                        <a href="register.html" class="btn btn-sm btn-primary">Register</a>
+                    </div>
+                    <div id="headerUserDropdown" class="dropdown d-none ms-2">
+                        <button class="btn btn-sm btn-light dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle fs-5 text-primary"></i>
+                            <span id="headerUserName" class="fw-semibold">Account</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm">
+                            <li><a class="dropdown-item" href="account.html"><i class="bi bi-person me-2"></i>My Profile</a></li>
+                            <li><a class="dropdown-item" href="orders.html"><i class="bi bi-box-seam me-2"></i>My Orders & Bill</a></li>
+                            <li><a class="dropdown-item" href="wishlist.html"><i class="bi bi-heart me-2"></i>Wishlist</a></li>
+                            <li><a class="dropdown-item text-primary fw-semibold d-none" id="headerAdminLink" href="admin.html"><i class="bi bi-speedometer2 me-2"></i>Admin Dashboard</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item text-danger" onclick="handleLogout()"><i class="bi bi-box-arrow-right me-2"></i>Sign Out</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Title -->
+    <div class="bg-white border-bottom py-4 mb-4">
+        <div class="container d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+                <h1 class="h3 fw-bold mb-0">Your Shopping Cart</h1>
+                <span class="text-muted small">PixelMart Quetta Showroom &bull; Hotline: 00816-23-736822</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-primary" onclick="openCartDrawer()">
+                <i class="bi bi-layout-sidebar-reverse me-1"></i> Open Cart Drawer
+            </button>
+        </div>
+    </div>
+
+    <!-- Cart Main Content -->
+    <main class="container pb-5">
+        <div id="cartLoadingSpinner" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="text-muted mt-2">Loading your cart items...</p>
+        </div>
+
+        <!-- Empty Cart State -->
+        <div id="emptyCartView" class="empty-state d-none max-w-600 mx-auto text-center py-5 bg-white rounded-3 border">
+            <i class="bi bi-bag-x empty-state-icon fs-1 text-muted mb-3 d-block"></i>
+            <h3 class="fw-bold mb-2">Your cart is currently empty</h3>
+            <p class="text-muted mb-4">You have not added any laptops or mobile phones to your shopping cart yet.</p>
+            <a href="shop.html" class="btn btn-primary btn-lg">
+                Explore Laptops & Mobiles <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+
+        <!-- Populated Cart View -->
+        <div id="populatedCartView" class="row g-4 d-none">
+            <!-- Left Column: Items List -->
+            <div class="col-lg-8">
+                <!-- Free Shipping Progress -->
+                <div class="card border-0 shadow-sm rounded-3 p-3 mb-4 bg-white" id="freeShippingBanner">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <i class="bi bi-truck text-primary fs-5"></i>
+                        <span class="small fw-semibold" id="freeShippingMessage">Free Delivery across Quetta on eligible orders!</span>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-primary" id="freeShippingBar" role="progressbar" style="width: 100%"></div>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm rounded-3 bg-white p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+                        <h5 class="fw-bold mb-0">Hardware Items (<span id="cartItemsCountText">0</span>)</h5>
+                        <button type="button" class="btn btn-sm btn-link text-danger text-decoration-none p-0" onclick="handleClearCart()">
+                            <i class="bi bi-trash3 me-1"></i> Clear Cart
+                        </button>
+                    </div>
+
+                    <div id="cartItemsList" class="d-flex flex-column gap-3">
+                        <!-- Items rendered dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Order Summary & Coupon -->
+            <div class="col-lg-4">
+                <div class="summary-card sticky-top bg-white p-4 rounded-3 border shadow-sm" style="top: 90px;">
+                    <h5 class="fw-bold mb-3">Order Summary</h5>
+
+                    <!-- Shipping Method Selector -->
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold text-muted text-uppercase">Delivery Option</label>
+                        <select class="form-select form-select-sm" id="cartShippingRuleSelect" onchange="reloadCartTotals()">
+                            <option value="standard" selected>Quetta Doorstep Delivery (FREE)</option>
+                            <option value="express">Balochistan Express Courier (PKR 1,500)</option>
+                        </select>
+                    </div>
+
+                    <!-- Breakdown in PKR -->
+                    <div class="summary-row d-flex justify-content-between py-2 border-bottom">
+                        <span>Subtotal</span>
+                        <strong id="cartSummarySubtotal">PKR 0</strong>
+                    </div>
+
+                    <div class="summary-row text-success d-none justify-content-between py-2 border-bottom" id="cartDiscountRow">
+                        <span>Discount (<span id="cartDiscountCodeBadge"></span>)</span>
+                        <strong id="cartSummaryDiscount">-PKR 0</strong>
+                    </div>
+
+                    <div class="summary-row d-flex justify-content-between py-2 border-bottom">
+                        <span>Shipping</span>
+                        <span id="cartSummaryShipping">FREE in Quetta</span>
+                    </div>
+
+                    <div class="summary-row summary-total d-flex justify-content-between py-3 fs-5 fw-bold">
+                        <span>Estimated Total</span>
+                        <span class="text-primary" id="cartSummaryGrandTotal">PKR 0</span>
+                    </div>
+
+                    <!-- Coupon Form -->
+                    <div class="mt-3 pt-3 border-top">
+                        <label class="form-label small fw-semibold text-muted text-uppercase">Promo Voucher</label>
+                        <div class="input-group input-group-sm mb-2" id="couponInputGroup">
+                            <input type="text" class="form-control text-uppercase" id="couponCodeInput" placeholder="Try SHALL10 or PIXEL10">
+                            <button class="btn btn-outline-primary" type="button" id="btnApplyCoupon" onclick="handleApplyCoupon()">Apply</button>
+                        </div>
+                        <div id="appliedCouponInfo" class="d-none alert alert-success py-2 px-3 small d-flex justify-content-between align-items-center mb-0">
+                            <span><i class="bi bi-tag-fill me-1"></i> Coupon <strong id="appliedCouponCode"></strong> applied!</span>
+                            <button type="button" class="btn-close btn-close-sm" onclick="handleRemoveCoupon()" aria-label="Remove coupon"></button>
+                        </div>
+                    </div>
+
+                    <!-- Checkout Button -->
+                    <a href="checkout.html" class="btn btn-primary btn-lg w-100 mt-4">
+                        Proceed to Checkout <i class="bi bi-arrow-right ms-2"></i>
+                    </a>
+
+                    <div class="text-center mt-3">
+                        <a href="shop.html" class="small text-muted text-decoration-none">
+                            <i class="bi bi-chevron-left"></i> Continue Shopping
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer-shall py-4 mt-5 bg-dark text-white text-center">
+        <div class="container">
+            <p class="mb-0">&copy; 2026 PixelMart &bull; MOBILE &bull; LAPTOP &bull; GADGETS &bull; Quetta, Balochistan. Contact: <strong>00816-23-736822</strong></p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/main.js"></script>
+
+    <!-- Cart Page Logic -->
+    <script>
+        let currentCart = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCartData();
+        });
+
+        async function loadCartData() {
+            const rule = document.getElementById('cartShippingRuleSelect')?.value || 'standard';
+            try {
+                currentCart = await API.cart.get(rule);
+                renderCart();
+            } catch (e) {
+                showToast(e.message || 'Failed to load cart.', 'error');
+            } finally {
+                document.getElementById('cartLoadingSpinner').classList.add('d-none');
+            }
+        }
+
+        function reloadCartTotals() {
+            loadCartData();
+        }
+
+        function renderCart() {
+            const emptyView = document.getElementById('emptyCartView');
+            const populatedView = document.getElementById('populatedCartView');
+
+            if (!currentCart || currentCart.is_empty || currentCart.items.length === 0) {
+                emptyView.classList.remove('d-none');
+                populatedView.classList.add('d-none');
+                updateCartBadge(0);
+                return;
+            }
+
+            emptyView.classList.add('d-none');
+            populatedView.classList.remove('d-none');
+            updateCartBadge(currentCart.total_items);
+
+            document.getElementById('cartItemsCountText').textContent = currentCart.total_items;
+
+            // Render items
+            const itemsList = document.getElementById('cartItemsList');
+            itemsList.innerHTML = currentCart.items.map(item => `
+                <div class="d-flex flex-wrap align-items-center justify-content-between p-3 border rounded-3 gap-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="${item.product.main_image || '../assets/images/placeholder.jpg'}" alt="${item.product.name}" class="rounded-2" style="width: 72px; height: 72px; object-fit: cover;" onerror="this.src='https://placehold.co/140x140/f8fafc/0f172a?text=PixelMart'">
+                        <div>
+                            <span class="badge bg-light text-primary border small mb-1">${item.product.brand || 'Hardware'}</span>
+                            <h6 class="mb-1 fw-bold">
+                                <a href="product-detail.html?slug=${item.product.slug}" class="text-reset text-decoration-none">${item.product.name}</a>
+                            </h6>
+                            <div class="text-muted small">${item.product.specs || ''}</div>
+                            <div class="text-primary small fw-semibold mt-1">Unit: ${formatPKR(item.unit_price)}</div>
+                            ${!item.in_stock ? `<span class="badge bg-danger">Only ${item.available_stock} in stock</span>` : ''}
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-4 ms-auto">
+                        <div class="quantity-control d-flex align-items-center border rounded">
+                            <button type="button" class="btn btn-sm btn-light" onclick="updateItemQuantity(${item.id}, ${item.quantity - 1})">-</button>
+                            <input type="number" class="form-control form-control-sm text-center border-0" style="width: 45px;" value="${item.quantity}" min="1" max="${item.available_stock}" onchange="updateItemQuantity(${item.id}, this.value)">
+                            <button type="button" class="btn btn-sm btn-light" onclick="updateItemQuantity(${item.id}, ${item.quantity + 1})" ${item.quantity >= item.available_stock ? 'disabled' : ''}>+</button>
+                        </div>
+                        <div class="text-end" style="min-width: 100px;">
+                            <span class="fw-bold fs-6 text-dark">${formatPKR(item.line_total)}</span>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-link text-muted p-0" onclick="removeItemFromCart(${item.id})" title="Remove item">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render totals in PKR
+            const totals = currentCart.totals;
+            document.getElementById('cartSummarySubtotal').textContent = formatPKR(totals.subtotal);
+            document.getElementById('cartSummaryShipping').textContent = parseFloat(totals.shipping_cost) === 0 ? 'FREE in Quetta' : formatPKR(totals.shipping_cost);
+            document.getElementById('cartSummaryGrandTotal').textContent = formatPKR(totals.grand_total);
+
+            // Coupon
+            const discountRow = document.getElementById('cartDiscountRow');
+            const couponGroup = document.getElementById('couponInputGroup');
+            const appliedInfo = document.getElementById('appliedCouponInfo');
+
+            if (currentCart.coupon_code && parseFloat(totals.discount_amount) > 0) {
+                discountRow.classList.remove('d-none');
+                discountRow.classList.add('d-flex');
+                document.getElementById('cartDiscountCodeBadge').textContent = currentCart.coupon_code;
+                document.getElementById('cartSummaryDiscount').textContent = `-${formatPKR(totals.discount_amount)}`;
+                couponGroup.classList.add('d-none');
+                appliedInfo.classList.remove('d-none');
+                document.getElementById('appliedCouponCode').textContent = currentCart.coupon_code;
+            } else {
+                discountRow.classList.add('d-none');
+                discountRow.classList.remove('d-flex');
+                couponGroup.classList.remove('d-none');
+                appliedInfo.classList.add('d-none');
+            }
+        }
+
+        async function updateItemQuantity(itemId, qty) {
+            const quantity = parseInt(qty);
+            if (quantity <= 0) {
+                removeItemFromCart(itemId);
+                return;
+            }
+            try {
+                const res = await API.cart.update(itemId, quantity);
+                currentCart = res.cart;
+                renderCart();
+            } catch (e) {
+                showToast(e.message || 'Could not update quantity.', 'error');
+                loadCartData();
+            }
+        }
+
+        async function removeItemFromCart(itemId) {
+            try {
+                const res = await API.cart.remove(itemId);
+                currentCart = res.cart;
+                renderCart();
+                showToast('Item removed from cart.', 'info');
+            } catch (e) {
+                showToast(e.message || 'Could not remove item.', 'error');
+            }
+        }
+
+        async function handleClearCart() {
+            if (!confirm('Are you sure you want to remove all items from your cart?')) return;
+            try {
+                await API.cart.clear();
+                currentCart = { is_empty: true, items: [] };
+                renderCart();
+                showToast('Cart cleared.', 'info');
+            } catch (e) {
+                showToast(e.message || 'Could not clear cart.', 'error');
+            }
+        }
+
+        async function handleApplyCoupon() {
+            const codeInput = document.getElementById('couponCodeInput');
+            const code = codeInput.value.trim();
+            if (!code) {
+                showToast('Please enter a voucher code.', 'error');
+                return;
+            }
+            try {
+                const res = await API.cart.applyCoupon(code);
+                currentCart = res.cart;
+                renderCart();
+                showToast(res.message || 'Coupon applied successfully!', 'success');
+            } catch (e) {
+                showToast(e.message || 'Invalid or expired coupon.', 'error');
+            }
+        }
+
+        async function handleRemoveCoupon() {
+            try {
+                const res = await API.cart.removeCoupon();
+                currentCart = res.cart;
+                renderCart();
+                showToast('Coupon removed.', 'info');
+            } catch (e) {
+                showToast(e.message || 'Could not remove coupon.', 'error');
+            }
+        }
+    </script>
+</body>
+</html>
